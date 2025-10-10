@@ -22,7 +22,41 @@ Include MPI calls you will use to coordinate between processes.
 
 Include MPI calls you will use to coordinate between processes.
 
+#### The MPI calls we will need are
+
+- MPI_Send
+- MPI_Recv
+- MPI_Init
+- MPI_Finalize
+
+#### Pseudocode (Master/Worker, Point-to-Point)
+
+    IF master:
+      for worker in workers:
+        MPI_Send() send equal amounts of data to each process
+      MergeSort() array of master
+      for worker in workers:
+        MPI_Recv() from all the workers
+        Merge() the recieved arrays together
+    ELSE:
+      MPI_Recv() recieve data from the master
+      MergeSort() array of each worker
+      MPI_Send() send the sorted array to the master
+
+
+    Merge(a,b) merges the two arrays together in sorted order
+    MergeSort() performs merge sort
+
+#### Pseudocode (SPMD, collective)
+
+    MPI_Scatter() sends equal amounts of data to each process
+    MergeSort()
+    IF id is even:
+
+    IF id is odd:
+
 ### 2c. Pseudocode for Radix Sort.
+
 Include MPI calls you will use to coordinate between processes.
 
 ### 2d. Pseudocode for Sample Sort.
@@ -43,9 +77,9 @@ we will fix the input data size (likely to 2^22 elements) and use
 we will vary the input data size as we increaase the number of processors. We will likely use
 the following pairs:
 
-(2^16 elements, 16 processors) 
+(2^16 elements, 16 processors)
 (2^18 elements, 32 processors)
-(2^20 elements, 64 processors) 
+(2^20 elements, 64 processors)
 (2^22 elements, 128 processors)
 (2^24 elements, 256 processors)
 (2^26 elements, 512 processors)
