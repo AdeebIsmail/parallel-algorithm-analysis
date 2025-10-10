@@ -47,14 +47,6 @@ Include MPI calls you will use to coordinate between processes.
     Merge(a,b) merges the two arrays together in sorted order
     MergeSort() performs merge sort
 
-#### Pseudocode (SPMD, collective)
-
-    MPI_Scatter() sends equal amounts of data to each process
-    MergeSort()
-    IF id is even:
-
-    IF id is odd:
-
 ### 2c. Pseudocode for Radix Sort.
 
 Include MPI calls you will use to coordinate between processes.
