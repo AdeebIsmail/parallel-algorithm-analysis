@@ -130,6 +130,21 @@ Include MPI calls you will use to coordinate between processes.
 ### 2d. Pseudocode for Sample Sort.
 
 Include MPI calls you will use to coordinate between processes.
+For array size N and processor count P,
+1. Pre-Sorting (Sequential portion):
+  - Split up and distribute the array evenly to each processor.
+  - P1 gets matrix [0:1*(N/P)-1], P2 gets matrix [1*(N/P):2*(N/P)-1], ..., Pk gets matrix [(k-1)*(N/P):k*(N/P)-1] and so on.
+  - Use MPI_Send to send the separated data to all the processes
+2. Local Sort:
+  - In each of the processors in the rank, sort the arrays locally.
+3. Local Sampling:
+  - In each of the local arrays in the rank, select `s = P` evenly spaced elements as its sample.
+  - Example: `s=P=4`, positions samples will be (0,2,4,6) in each of those local arrays if the local array size is 8 elements
+4. Gathering Samples:
+  - Using MPI_Allgather function, gather all samples from every processor.
+5. Sort the Gathered Samples:
+  - Sort the gathered samples array (that came from all the ranks)
+6. In the sorted gathered array, 
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
