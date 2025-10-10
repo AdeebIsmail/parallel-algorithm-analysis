@@ -7,10 +7,10 @@ Communication medium : Discord
 
 ## 1. Group members, what algorithm they are implementing
 
-1. Bitonic Sort: Student name
+1. Bitonic Sort: Jack Williams
 2. Merge Sort: Adeeb Ismail
 3. Radix Sort: Soham Nagawanshi
-4. Sample Sort: Student name
+4. Sample Sort: David Armijo
 
 ### 2. Brief project description, what architecture you are comparing your sorting algorithms on.
 
@@ -129,6 +129,14 @@ Include MPI calls you will use to coordinate between processes.
 
 ### 2d. Pseudocode for Sample Sort.
 
+#### MPI Calls We will Need
+- MPI_Send
+- MPI_Recv
+- MPI_Init
+- MPI_Allgather
+- MPI_Finalize
+
+#### Pseudocode
 Include MPI calls you will use to coordinate between processes.
 For array size N and processor count P,
 1. Pre-Sorting (Sequential portion):
