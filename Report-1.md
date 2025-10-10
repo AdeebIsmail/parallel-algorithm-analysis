@@ -9,7 +9,7 @@ Communication medium : Discord
 
 1. Bitonic Sort: Student name
 2. Merge Sort: Adeeb Ismail
-3. Radix Sort: Student name
+3. Radix Sort: Soham Nagawanshi
 4. Sample Sort: Student name
 
 ### 2. Brief project description, what architecture you are comparing your sorting algorithms on.
@@ -23,7 +23,6 @@ Include MPI calls you will use to coordinate between processes.
 Include MPI calls you will use to coordinate between processes.
 
 ### 2c. Pseudocode for Radix Sort.
-
 Include MPI calls you will use to coordinate between processes.
 
 ### 2d. Pseudocode for Sample Sort.
@@ -32,11 +31,25 @@ Include MPI calls you will use to coordinate between processes.
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
-- Data types (int, double)
-- Input sizes
-- Input types (Sorted, Sorted with 1% perturbed, Random, Reverse sorted)
-- Strong scaling (same problem size, increase number of processors/nodes)
-- Weak scaling (increase problem size, increase number of processors)
+Our evaluation will vary multiple parameters and we will measure performance
+using caliper instrumentation. Our first experiments will vary data types and fix the
+other parameters. For this experiment, we plan to compare sorting an integer array with a double
+array. Our second experiment will vary input data sizes while fixing other parameters. We will use
+2^16, 2^18, 2^20, 2^22, 2^24, 2^26, and 2^28 elements for evaluation. Our third experiment will
+vary the sorting level. We will test on a sorted array, a sorted array with 1% perturbation,
+a randomly generated array, and a reversely sorted array. To gauge strong scaling performance,
+we will fix the input data size (likely to 2^22 elements) and use
+2, 4, 8, 16, 32, 64, 128, 256, 512, and 1024 processors for evaluation. To gauge weak scaling,
+we will vary the input data size as we increaase the number of processors. We will likely use
+the following pairs:
+
+(2^16 elements, 16 processors) 
+(2^18 elements, 32 processors)
+(2^20 elements, 64 processors) 
+(2^22 elements, 128 processors)
+(2^24 elements, 256 processors)
+(2^26 elements, 512 processors)
+(2^28 elements, 1024 processors)
 
 ### 4. Caliper instrumentation
 
