@@ -16,6 +16,82 @@ Communication medium : Discord
 
 ### 2a. Pseudocode for Bitonic Sort.
 
+BITONIC_MPI_SORT(comm, local[]):
+    MPI_Init()
+    P ← MPI_Comm_size(comm)
+    r ← MPI_Comm_rank(comm)
+
+    # 0) Local pre-sort (ascending)
+    sort(local)   # e.g., quicksort; in-place; ascending
+
+    # 1) Process-level bitonic network
+    size ← 2
+    while size ≤ P:
+
+        # j walks partner distances inside this size-group: size/2, size/4, ..., 1
+        j ← size / 2
+        while j ≥ 1:
+
+            partner ← r XOR j
+
+            # Keep-lower vs keep-upper decision:
+            # If our 'size' bit in r is 0 ⇒ we are in the group's lower half ⇒ keep lower n.
+            # If it's 1 ⇒ we are in the group's upper half ⇒ keep upper n.
+            keep_lower ← ((r AND size) == 0)
+
+            # Exchange equal-sized sorted blocks with partner
+            temp[] ← buffer of length n (same type as local[])
+            MPI_Sendrecv(sendbuf=local, sendcount=n, sendtype=T, dest=partner, tag=0,
+                         recvbuf=temp,  recvcount=n, recvtype=T, source=partner, recvtag=0,
+                         comm, status=IGNORE)
+
+            # Compare–split: merge two sorted blocks and keep our half
+            if keep_lower:
+                local ← MERGE_KEEP_LOW_N(local, temp)     # keep smallest n
+            else:
+                local ← MERGE_KEEP_HIGH_N(local, temp)    # keep largest n
+
+            j ← j / 2
+        end while
+
+        size ← size * 2
+    end while
+
+    # (Optional) Gather final globally sorted data to root for verification/display
+    # MPI_Gatherv(local → root)
+
+    MPI_Finalize()
+    return
+
+# ----------------------- Helpers -----------------------
+
+MERGE_KEEP_LOW_N(A[], B[]):
+    # A and B: each length n, both sorted ascending
+    # Return the smallest n elements of their union without building 2n
+    i ← 0; j ← 0; k ← 0
+    C[] ← new array length n
+    while k < n:
+        if j == n or (i < n and A[i] ≤ B[j]):
+            C[k] ← A[i];  i ← i + 1
+        else:
+            C[k] ← B[j];  j ← j + 1
+        k ← k + 1
+    return C
+
+MERGE_KEEP_HIGH_N(A[], B[]):
+    # A and B: each length n, both sorted ascending
+    # Return the largest n elements; scan from the end
+    i ← n - 1; j ← n - 1; k ← n - 1
+    C[] ← new array length n
+    while k ≥ 0:
+        if j < 0 or (i ≥ 0 and A[i] ≥ B[j]):
+            C[k] ← A[i];  i ← i - 1
+        else:
+            C[k] ← B[j];  j ← j - 1
+        k ← k - 1
+    return C
+
+
 Include MPI calls you will use to coordinate between processes.
 
 ### 2b. Pseudocode for Merge Sort.
