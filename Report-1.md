@@ -147,7 +147,7 @@ function radix-sort(data, k, P)
         dig <- ith LSD of element
         add element to buckets[dig]
         hist[dig] += 1
-      MPI_Allgather(hist) # broadcast histogram to all workers, resuklt is |P| x 10 matrix
+      MPI_Allgather(hist) # broadcast histogram to all workers, result is |P| x 10 matrix
       # send buckets to processors in sequential fashion (i.e. bucket 0 will go to smaller rank processors but
                                                           bucket 9 will go to bigger rank processor) 
       recv_procs <- calculate which processes you will receive from based on hist
