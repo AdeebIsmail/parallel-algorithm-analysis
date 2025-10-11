@@ -209,8 +209,9 @@ For array size N and processor count P,
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
-Our evaluation will vary multiple parameters and we will measure performance
-using caliper instrumentation. Our first experiments will vary data types and fix the
+We will vary multiple parameters and will measure performance
+using caliper instrumentation. For each experiment, we will take the measurements
+mentioned in 6c. Our first experiment will vary data types and fix the
 other parameters. For this experiment, we plan to compare sorting an integer array with a double
 array. Our second experiment will vary input data sizes while fixing other parameters. We will use
 2^16, 2^18, 2^20, 2^22, 2^24, 2^26, and 2^28 elements for evaluation. Our third experiment will
@@ -218,16 +219,20 @@ vary the sorting level. We will test on a sorted array, a sorted array with 1% p
 a randomly generated array, and a reversely sorted array. To gauge strong scaling performance,
 we will fix the input data size (likely to 2^22 elements) and use
 2, 4, 8, 16, 32, 64, 128, 256, 512, and 1024 processors for evaluation. To gauge weak scaling,
-we will vary the input data size as we increaase the number of processors. We will likely use
+we will vary the input data size as we increase the processor count. We will likely use
 the following pairs:
 
-(2^16 elements, 16 processors)
-(2^18 elements, 32 processors)
-(2^20 elements, 64 processors)
-(2^22 elements, 128 processors)
-(2^24 elements, 256 processors)
-(2^26 elements, 512 processors)
-(2^28 elements, 1024 processors)
+* (2^16 elements, 16 processors)
+* (2^18 elements, 32 processors)
+* (2^20 elements, 64 processors)
+* (2^22 elements, 128 processors)
+* (2^24 elements, 256 processors)
+* (2^26 elements, 512 processors)
+* (2^28 elements, 1024 processors)
+
+We will carry out these experiments for each of the sorting algorithms
+and compare the performance across different input sizes / processor counts using
+graphics. We will also include graphics that compare performance between algorithms.
 
 ### 4. Caliper instrumentation
 
