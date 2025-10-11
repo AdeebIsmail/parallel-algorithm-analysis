@@ -133,15 +133,21 @@ P: processor array
 
 function radix-sort(data, k, P)
   # initialization
-  blocks <- divide into |P| continguous blocks (each has size |data|/|P|) 
-  MPI_Send(blocks_i, p_i) # send each block to corresponding processor
+  blocks <- divide into |P| continguous blocks (each has size |data|/|P|)
+
+  If Master: 
+    MPI_Send(blocks_i, p_i) # send each block to corresponding processor
   
   If Worker:
-    Repeat k times
-      buckets <- {0: {}, ..., 9: {}} # itemizes data by k'th LSD
-      hist <- {1: 0, ..., 9: 0} # keeps track of the size of each digit bucket
-      place blocks in buckets based on k'th LSD
-      MPI_Allgather(hist) # broadcast histogram to all workers
+    MPI_Recv(my_block, Master)
+    Repeat for i in {1 ... k}
+      buckets <- {0: [], 1: [], ..., 9: []} # itemizes data by i'th LSD
+      hist <- [0, 0, .., 0] # keeps track of the size of each digit bucket
+      for each element in my_block
+        dig <- ith LSD of element
+        add element to buckets[dig]
+        hist[dig] += 1
+      MPI_Allgather(hist) # broadcast histogram to all workers, resuklt is |P| x 10 matrix
       # send buckets to processors in sequential fashion (i.e. bucket 0 will go to smaller rank processors but
                                                           bucket 9 will go to bigger rank processor) 
       recv_procs <- calculate which processes you will receive from based on hist
@@ -152,9 +158,11 @@ function radix-sort(data, k, P)
           MPI_Send(blocks, send_procs)
     MPI_Send(blocks, Master)
   If Master:
+    sorted_data <- empty array
     for each p in P: # iterate sequentially for correct order
         MPI_Recv(blocks, p)
-        place blocks in data
+        place blocks in sorted_data
+      
     output sorted data
 ```
   
