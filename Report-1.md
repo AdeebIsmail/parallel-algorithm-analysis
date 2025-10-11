@@ -130,10 +130,12 @@ Include MPI calls you will use to coordinate between processes.
 ### 2d. Pseudocode for Sample Sort.
 
 #### MPI Calls We will Need
-- MPI_Send
-- MPI_Recv
+- MPI_Send (For Master and Slave). Whenever point-to-point communication is necessary
+- MPI_Recv (For Master and Slave). Whenever point-to-point communication is necessary
 - MPI_Init
-- MPI_Allgather
+- **MPI_Allgather**
+- **MPI_Alltoall**
+- **MPI_Alltoallv**
 - MPI_Finalize
 
 #### Pseudocode
@@ -149,10 +151,20 @@ For array size N and processor count P,
   - In each of the local arrays in the rank, select `s = P` evenly spaced elements as its sample.
   - Example: `s=P=4`, positions samples will be (0,2,4,6) in each of those local arrays if the local array size is 8 elements
 4. Gathering Samples:
-  - Using MPI_Allgather function, gather all samples from every processor.
+  - Using `MPI_Allgather` function, gather all samples from every processor.
 5. Sort the Gathered Samples:
   - Sort the gathered samples array (that came from all the ranks)
-6. In the sorted gathered array, 
+6. Partition by Splitters:
+  - In the sorted gathered array, split that array up into P parts. In other words, make P-1 splitters and make them the values of your bucket list.
+  - Ex: For 16 samples (from those 4 ranks or Processors), pick indices 1*(16/4), 2\*(16/4), and 3\*(16/4). These will be your S1 = __, S2 = __, and S3 = __.
+7. Partition by splitters.
+  - Your buckets are the values at the indices of the sorted, combined sample list. All the ranks then receive that list of splitter values to bin their local lists via `MPI_Alltoall`.
+8. Sort local lists using global splitter values.
+  - Make sure to place them in their respective bins if they are less than or equal to that splitter value.
+9. All-to-All Exchange
+  - Each rank sends Bj to rank j. After `MPI_Alltoallv`, each rank holds one bucket's *global* range.
+10. Final local sort/merge:
+  - If you've done stable partitioning on already sorted local arrays, each rank can *merge* its received, already-sorted chunks (k-way merge). Otherwise, just sort once more locally. THe concatentation scross (0...3) is the globally sorted order
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
