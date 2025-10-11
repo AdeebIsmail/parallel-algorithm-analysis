@@ -205,7 +205,7 @@ For array size N and processor count P,
 9. All-to-All Exchange
   - Each rank sends Bj to rank j. After `MPI_Alltoallv`, each rank holds one bucket's *global* range.
 10. Final local sort/merge:
-  - If you've done stable partitioning on already sorted local arrays, each rank can *merge* its received, already-sorted chunks (k-way merge). Otherwise, just sort once more locally. THe concatentation scross (0...3) is the globally sorted order
+  - If you've done stable partitioning on already sorted local arrays, each rank can *merge* its received, already-sorted chunks (k-way merge). Otherwise, just sort once more locally. The concatenation across (0...3) is the globally sorted order
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
