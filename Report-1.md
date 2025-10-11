@@ -125,7 +125,40 @@ Include MPI calls you will use to coordinate between processes.
 
 ### 2c. Pseudocode for Radix Sort.
 
-Include MPI calls you will use to coordinate between processes.
+note: LSD = least significant digit
+```
+data: data to sort
+k: maximum number of digits in any element of data
+P: processor array
+
+function radix-sort(data, k, P)
+  # initialization
+  blocks <- divide into |P| continguous blocks (each has size |data|/|P|) 
+  MPI_Send(blocks_i, p_i) # send each block to corresponding processor
+  
+  If Worker:
+    Repeat k times
+      buckets <- {0: {}, ..., 9: {}} # itemizes data by k'th LSD
+      hist <- {1: 0, ..., 9: 0} # keeps track of the size of each digit bucket
+      place blocks in buckets based on k'th LSD
+      MPI_Allgather(hist) # broadcast histogram to all workers
+      # send buckets to processors in sequential fashion (i.e. bucket 0 will go to smaller rank processors but
+                                                          bucket 9 will go to bigger rank processor) 
+      recv_procs <- calculate which processes you will receive from based on hist
+      send_procs <- calculate which processes you will send to based on hist
+      for each recv_proc:
+          MPI_Recv(blocks, recv_procs)
+      for each send_proc:
+          MPI_Send(blocks, send_procs)
+    MPI_Send(blocks, Master)
+  If Master:
+    for each p in P: # iterate sequentially for correct order
+        MPI_Recv(blocks, p)
+        place blocks in data
+    output sorted data
+```
+  
+
 
 ### 2d. Pseudocode for Sample Sort.
 
