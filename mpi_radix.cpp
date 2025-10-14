@@ -14,7 +14,9 @@ enum SortLevel {
 	REVERSED 
 };
 
-void initialize_array(double *toSort, int numElements, char *dataType, SortLevel level);
+void initializeArray(double *toSort, int numElements, char *dataType, SortLevel level);
+bool isSorted(double *toSort, int numElements);
+
 
 int main(int argc, char *argv[]) {
 	if (argc != 5) {
@@ -24,18 +26,18 @@ int main(int argc, char *argv[]) {
 	int numElements = std::stoi(argv[2]);
 	SortLevel level = static_cast<SortLevel>(std::stoi(argv[4]));
 	double* toSort = new double[numElements];
-	initialize_array(toSort, numElements, argv[1], level);
+	initializeArray(toSort, numElements, argv[1], level);
+        std::cout << "Is sorted: " << isSorted(toSort, numElements) << std::endl;
+        for (int i = 0; i < numElements; i++) {
+	    std::cout << toSort[i] << " ";
 	
-	// for (int i = 0; i < numElements; i++) {
-	// 	std::cout << toSort[i] << std::endl;
-	// }
-	// std::cout << toSort[numElements-1] << " " << toSort[0] << std::endl;
-	std::cout << sizeof(double) << " " << sizeof(int) << std::endl;	
+	}	
 	delete[] toSort;
 
 }
 
-void initialize_array(double *toSort, int numElements, char *dataType, SortLevel level) {
+
+void initializeArray(double *toSort, int numElements, char *dataType, SortLevel level) {
 
 	double biggest_number = 10;
 	double max_increment = biggest_number/(double)(numElements);
@@ -102,6 +104,20 @@ void initialize_array(double *toSort, int numElements, char *dataType, SortLevel
 	default:
 		break;
 	}
+
 }
+bool isSorted(double *toSort, int numElements) {
+
+   bool sorted = true;
+   
+   for (int i = 1; i < numElements-1; i++) {
+       if (toSort[i] > toSort[i+1]) {
+          sorted = false;
+       }
+   }
+    
+   return sorted;
+}    		
+
 
 
