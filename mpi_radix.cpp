@@ -14,8 +14,10 @@ enum SortLevel {
 	REVERSED 
 };
 
-void initializeArray(double *toSort, int numElements, char *dataType, SortLevel level);
+void initializeDoubleArray(double *toSort, int numElements, SortLevel level);
+void initializeIntArray(int *toSort, int numElements, SortLevel level);
 bool isSorted(double *toSort, int numElements);
+void sequentialRadixSort(double *toSort, int numElements);
 
 
 int main(int argc, char *argv[]) {
@@ -26,7 +28,7 @@ int main(int argc, char *argv[]) {
 	int numElements = std::stoi(argv[2]);
 	SortLevel level = static_cast<SortLevel>(std::stoi(argv[4]));
 	double* toSort = new double[numElements];
-	initializeArray(toSort, numElements, argv[1], level);
+	initializeDoubleArray(toSort, numElements, level);
         std::cout << "Is sorted: " << isSorted(toSort, numElements) << std::endl;
         for (int i = 0; i < numElements; i++) {
 	    std::cout << toSort[i] << " ";
@@ -37,7 +39,7 @@ int main(int argc, char *argv[]) {
 }
 
 
-void initializeArray(double *toSort, int numElements, char *dataType, SortLevel level) {
+void initializeDoubleArray(double *toSort, int numElements, SortLevel level) {
 
 	double biggest_number = 10;
 	double max_increment = biggest_number/(double)(numElements);
@@ -117,7 +119,11 @@ bool isSorted(double *toSort, int numElements) {
    }
     
    return sorted;
-}    		
+}
+
+void sequentialRadixSort(double *toSort, int numElements) {
+	
+}
 
 
 
