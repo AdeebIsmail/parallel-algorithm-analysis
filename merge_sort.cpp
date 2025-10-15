@@ -1,8 +1,9 @@
+#include <caliper/cali-manager.h>
+#include <caliper/cali.h>
 #include <math.h>
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 int *merge_arrays(int *A, int nA, int *B, int nB) {
   int *result = new int[nA + nB];
   int i = 0, j = 0, k = 0;
@@ -76,6 +77,8 @@ void MergeSort(int *arr, int n) {
 }
 
 int main(int argc, char **argv) {
+  CALI_CXX_MARK_FUNCTION;
+
   int rank, size;
   int element;
 
@@ -94,42 +97,59 @@ int main(int argc, char **argv) {
   int *data = nullptr;
 
   if (rank == 0) {
+    CALI_MARK_BEGIN(data_init_runtime);
     n = 1 << element;
     data = new int[n];
     srand(101);
-    printf("Original array: ");
     for (int i = 0; i < n; i++) {
       data[i] = rand() % 100;
-      printf("%d ", data[i]);
     }
-    printf("\n");
+    CALI_MARK_END(data_init_runtime);
   }
   // Size of the array
-
+  CALI_MARK_BEGIN("comm");
+  CALI_MARK_BEGIN("comm_small_Bcast");
   MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  CALI_MARK_END("comm_small_Bcast");
+  CALI_MARK_END("comm");
 
   int local_n = n / size;
   int *local_data = new int[local_n];
 
   // Split up data of size local_n and send to each process, receives into
   // local_data and is of size local_n
+  CALI_MARK_BEGIN("comm");
+  CALI_MARK_BEGIN("comm_large_Scatter");
   MPI_Scatter(data, local_n, MPI_INT, local_data, local_n, MPI_INT, 0,
               MPI_COMM_WORLD);
+  CALI_MARK_END("comm_large_Scatter");
+  CALI_MARK_END("comm");
 
+  CALI_MARK_BEGIN("comp");
+  CALI_MARK_BEGIN("comp_small_merge_sort");
   MergeSort(local_data, local_n);
+  CALI_MARK_END("comp_small_merge_sort");
+  CALI_MARK_END("comp");
 
   int step = 1;
   while (step < size) {
     if (rank % (2 * step) == 0) {
       int recv_proc = rank + step;
       int recv_n;
+      CALI_MARK_BEGIN("comm");
+      CALI_MARK_BEGIN("comm_large_recv");
       MPI_Recv(&recv_n, 1, MPI_INT, recv_proc, 0, MPI_COMM_WORLD,
                MPI_STATUS_IGNORE);
       int *recv_data = new int[recv_n];
       MPI_Recv(recv_data, recv_n, MPI_INT, recv_proc, 0, MPI_COMM_WORLD,
                MPI_STATUS_IGNORE);
-
+      CALI_MARK_END("comm_large_recv");
+      CALI_MARK_END("comm");
+      CALI_MARK_BEGIN("comp");
+      CALI_MARK_BEGIN("comp_large_merge_arrays");
       int *merged = merge_arrays(local_data, local_n, recv_data, recv_n);
+      CALI_MARK_END("comp_large_merge_arrays");
+      CALI_MARK_END("comp");
       delete[] local_data;
       delete[] recv_data;
       local_data = merged;
@@ -137,19 +157,21 @@ int main(int argc, char **argv) {
 
     } else {
       int send_proc = rank - step;
+      CALI_MARK_BEGIN("comm");
+      CALI_MARK_BEGIN("comm_large_send");
       MPI_Send(&local_n, 1, MPI_INT, send_proc, 0, MPI_COMM_WORLD);
       MPI_Send(local_data, local_n, MPI_INT, send_proc, 0, MPI_COMM_WORLD);
+      CALI_MARK_END("comm_large_send");
+      CALI_MARK_END("comm");
       break;
     }
     step *= 2;
   }
 
   if (rank == 0) {
-    printf("Sorted array: ");
-    for (int i = 0; i < local_n; i++) {
-      printf("%d ", local_data[i]);
-    }
-    printf("\n");
+    CALI_MARK_BEGIN(correctness_check);
+
+    CALI_MARK_END(correctness_check);
   }
 
   delete[] local_data;
