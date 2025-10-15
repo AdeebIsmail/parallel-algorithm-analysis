@@ -23,7 +23,8 @@ void initializeDoubleArray(double *toSort, int numElements, SortLevel level);
 void initializeIntArray(int *toSort, int numElements, SortLevel level);
 bool isSortedDouble(double *toSort, int numElements);
 bool isSortedInt(int *toSort, int numElements);
-void sequentialRadixSort(double *toSort, int numElements);
+void sequentialRadixSortDouble(double *toSort, int numElements);
+void sequentialRadixSortInt(int *toSort, int numElements);
 
 
 int main(int argc, char *argv[]) {
@@ -45,6 +46,7 @@ int main(int argc, char *argv[]) {
 			// 	std::cout << toSort[i] << " ";
 			// }
 			std::cout << std::endl << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
+			sequentialRadixSortInt(toSort, numElements);
 			delete[] toSort;
 			
 		}
@@ -228,7 +230,12 @@ bool isSortedInt(int *toSort, int numElements) {
 	return sorted;
  }
 
-void sequentialRadixSort(double *toSort, int numElements) {
+void sequentialRadixSortDouble(double *toSort, int numElements) {
+	
+}
+
+void sequentialRadixSortInt(int *toSort, int numElements) {
+	std::cout << "Size of int: " << sizeof(int) << std::endl;
 	
 }
 
