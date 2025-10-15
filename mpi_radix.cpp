@@ -20,23 +20,26 @@ void sequentialRadixSortInt(int *&toSort, int numElements);
 
 
 int main(int argc, char *argv[]) {
-	if (argc != 4) {
-		printf("Usage: ./mpi_radix <num_elements> <num_procs> <sort_level>");
+	if (argc != 3) {
+		printf("Usage: ./mpi_radix <num_elements> <sort_level>");
+		return 1;
 	}
+	MPI_Init(&argc, &argv);
 	
 	int numElements = std::stoi(argv[1]);
-	SortLevel level = static_cast<SortLevel>(std::stoi(argv[3]));
+	SortLevel level = static_cast<SortLevel>(std::stoi(argv[2]));
 
 	int* toSort = new int[numElements];
 	initializeIntArray(toSort, numElements, level);
-	// std::cout << "Before: ";
-	// for (int i = 0; i < numElements; i++) {
-	// 	std::cout << toSort[i] << " ";
-	// }
-	// std::cout << std::endl;
+	std::cout << "Before: ";
+	for (int i = 0; i < numElements; i++) {
+		std::cout << toSort[i] << " ";
+	}
+	std::cout << std::endl;
 	sequentialRadixSortInt(toSort, numElements);
 	std::cout << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
 	delete[] toSort;
+	MPI_Finalize();
 }
 
 void initializeIntArray(int *toSort, int numElements, SortLevel level) {
@@ -168,11 +171,11 @@ void sequentialRadixSortInt(int *&toSort, int numElements) {
 		toSort = sortedArray;
 	}
 
-	// std::cout << "After: ";
-	// for (int i = 0; i < numElements; i++) {
-	// 	std::cout << toSort[i] << " ";
-	// }
-	// std::cout << std::endl;
+	std::cout << "After: ";
+	for (int i = 0; i < numElements; i++) {
+		std::cout << toSort[i] << " ";
+	}
+	std::cout << std::endl;
 }
 
 

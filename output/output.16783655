@@ -1,0 +1,20 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+terminate called after throwing an instance of 'std::logic_error'
+  what():  basic_string: construction from null is not valid
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 3638368 RUNNING AT c324
+=   KILLED BY SIGNAL: 6 (Aborted)
+===================================================================================
+JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
+16783655     JobName              ndsoham                  short                  1      2     RUNNING      0:41         14:19        2025-10-15T16:08  None                     c324
