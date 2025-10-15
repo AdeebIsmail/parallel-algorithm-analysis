@@ -17,9 +17,9 @@ Communication medium : Discord
 ### 2a. Pseudocode for Bitonic Sort.
 
 BITONIC_MPI_SORT(comm, local[]):
-    MPI_Init()
-    P ← MPI_Comm_size(comm)
-    r ← MPI_Comm_rank(comm)
+MPI_Init()
+P ← MPI_Comm_size(comm)
+r ← MPI_Comm_rank(comm)
 
     # 0) Local pre-sort (ascending)
     sort(local)   # e.g., quicksort; in-place; ascending
@@ -65,32 +65,27 @@ BITONIC_MPI_SORT(comm, local[]):
 
 # ----------------------- Helpers -----------------------
 
-MERGE_KEEP_LOW_N(A[], B[]):
-    # A and B: each length n, both sorted ascending
-    # Return the smallest n elements of their union without building 2n
-    i ← 0; j ← 0; k ← 0
-    C[] ← new array length n
-    while k < n:
-        if j == n or (i < n and A[i] ≤ B[j]):
-            C[k] ← A[i];  i ← i + 1
-        else:
-            C[k] ← B[j];  j ← j + 1
-        k ← k + 1
-    return C
+MERGE_KEEP_LOW_N(A[], B[]): # A and B: each length n, both sorted ascending # Return the smallest n elements of their union without building 2n
+i ← 0; j ← 0; k ← 0
+C[] ← new array length n
+while k < n:
+if j == n or (i < n and A[i] ≤ B[j]):
+C[k] ← A[i]; i ← i + 1
+else:
+C[k] ← B[j]; j ← j + 1
+k ← k + 1
+return C
 
-MERGE_KEEP_HIGH_N(A[], B[]):
-    # A and B: each length n, both sorted ascending
-    # Return the largest n elements; scan from the end
-    i ← n - 1; j ← n - 1; k ← n - 1
-    C[] ← new array length n
-    while k ≥ 0:
-        if j < 0 or (i ≥ 0 and A[i] ≥ B[j]):
-            C[k] ← A[i];  i ← i - 1
-        else:
-            C[k] ← B[j];  j ← j - 1
-        k ← k - 1
-    return C
-
+MERGE_KEEP_HIGH_N(A[], B[]): # A and B: each length n, both sorted ascending # Return the largest n elements; scan from the end
+i ← n - 1; j ← n - 1; k ← n - 1
+C[] ← new array length n
+while k ≥ 0:
+if j < 0 or (i ≥ 0 and A[i] ≥ B[j]):
+C[k] ← A[i]; i ← i - 1
+else:
+C[k] ← B[j]; j ← j - 1
+k ← k - 1
+return C
 
 Include MPI calls you will use to coordinate between processes.
 
@@ -123,9 +118,28 @@ Include MPI calls you will use to coordinate between processes.
     Merge(a,b) merges the two arrays together in sorted order
     MergeSort() performs merge sort
 
+#### Pseudocode (SPMD, Broadcast)
+
+    IF master:
+      generate data
+
+    MPI_Scatter all data to each process
+    MergeSort() each array
+    step = 1;
+    WHILE (step < size)
+      IF rank % (step * 2):
+        recv_proc = rank + step recv from its neighbor
+        MPI_Recv()
+        merge() the two arrays
+      ELSE
+        send_proc = rank - step send to its neighbor
+        MPI_Send()
+      step *= 2
+
 ### 2c. Pseudocode for Radix Sort.
 
 note: LSD = least significant digit
+
 ```
 data: data to sort
 k: maximum number of digits in any element of data
@@ -135,9 +149,9 @@ function radix-sort(data, k, P)
   # initialization
   blocks <- divide into |P| continguous blocks (each has size |data|/|P|)
 
-  If Master: 
+  If Master:
     MPI_Send(blocks_i, p_i) # send each block to corresponding processor
-  
+
   If Worker:
     MPI_Recv(my_block, Master)
     Repeat for i in {1 ... k}
@@ -149,7 +163,7 @@ function radix-sort(data, k, P)
         hist[dig] += 1
       MPI_Allgather(hist) # broadcast histogram to all workers, result is |P| x 10 matrix
       # send buckets to processors in sequential fashion (i.e. bucket 0 will go to smaller rank processors but
-                                                          bucket 9 will go to bigger rank processor) 
+                                                          bucket 9 will go to bigger rank processor)
       recv_procs <- calculate which processes you will receive from based on hist
       send_procs <- calculate which processes you will send to based on hist
       for each recv_proc:
@@ -162,15 +176,14 @@ function radix-sort(data, k, P)
     for each p in P: # iterate sequentially for correct order
         MPI_Recv(blocks, p)
         place blocks in sorted_data
-      
+
     output sorted data
 ```
-  
-
 
 ### 2d. Pseudocode for Sample Sort.
 
 #### MPI Calls We will Need
+
 - MPI_Send (For Master and Slave). Whenever point-to-point communication is necessary
 - MPI_Recv (For Master and Slave). Whenever point-to-point communication is necessary
 - MPI_Init
@@ -180,32 +193,53 @@ function radix-sort(data, k, P)
 - MPI_Finalize
 
 #### Pseudocode
+
 Include MPI calls you will use to coordinate between processes.
 For array size N and processor count P,
+
 1. Pre-Sorting (Sequential portion):
-  - Split up and distribute the array evenly to each processor.
-  - P1 gets matrix [0:1*(N/P)-1], P2 gets matrix [1*(N/P):2*(N/P)-1], ..., Pk gets matrix [(k-1)*(N/P):k*(N/P)-1] and so on.
-  - Use MPI_Send to send the separated data to all the processes
+
+- Split up and distribute the array evenly to each processor.
+- P1 gets matrix [0:1*(N/P)-1], P2 gets matrix [1*(N/P):2*(N/P)-1], ..., Pk gets matrix [(k-1)*(N/P):k*(N/P)-1] and so on.
+- Use MPI_Send to send the separated data to all the processes
+
 2. Local Sort:
-  - In each of the processors in the rank, sort the arrays locally.
+
+- In each of the processors in the rank, sort the arrays locally.
+
 3. Local Sampling:
-  - In each of the local arrays in the rank, select `s = P` evenly spaced elements as its sample.
-  - Example: `s=P=4`, positions samples will be (0,2,4,6) in each of those local arrays if the local array size is 8 elements
+
+- In each of the local arrays in the rank, select `s = P` evenly spaced elements as its sample.
+- Example: `s=P=4`, positions samples will be (0,2,4,6) in each of those local arrays if the local array size is 8 elements
+
 4. Gathering Samples:
-  - Using `MPI_Allgather` function, gather all samples from every processor.
+
+- Using `MPI_Allgather` function, gather all samples from every processor.
+
 5. Sort the Gathered Samples:
-  - Sort the gathered samples array (that came from all the ranks)
+
+- Sort the gathered samples array (that came from all the ranks)
+
 6. Partition by Splitters:
-  - In the sorted gathered array, split that array up into P parts. In other words, make P-1 splitters and make them the values of your bucket list.
-  - Ex: For 16 samples (from those 4 ranks or Processors), pick indices 1*(16/4), 2\*(16/4), and 3\*(16/4). These will be your S1 = __, S2 = __, and S3 = __.
+
+- In the sorted gathered array, split that array up into P parts. In other words, make P-1 splitters and make them the values of your bucket list.
+- Ex: For 16 samples (from those 4 ranks or Processors), pick indices 1\*(16/4), 2\*(16/4), and 3\*(16/4). These will be your S1 = **, S2 = **, and S3 = \_\_.
+
 7. Partition by splitters.
-  - Your buckets are the values at the indices of the sorted, combined sample list. All the ranks then receive that list of splitter values to bin their local lists via `MPI_Alltoall`.
+
+- Your buckets are the values at the indices of the sorted, combined sample list. All the ranks then receive that list of splitter values to bin their local lists via `MPI_Alltoall`.
+
 8. Sort local lists using global splitter values.
-  - Make sure to place them in their respective bins if they are less than or equal to that splitter value.
+
+- Make sure to place them in their respective bins if they are less than or equal to that splitter value.
+
 9. All-to-All Exchange
-  - Each rank sends Bj to rank j. After `MPI_Alltoallv`, each rank holds one bucket's *global* range.
+
+- Each rank sends Bj to rank j. After `MPI_Alltoallv`, each rank holds one bucket's _global_ range.
+
 10. Final local sort/merge:
-  - If you've done stable partitioning on already sorted local arrays, each rank can *merge* its received, already-sorted chunks (k-way merge). Otherwise, just sort once more locally. The concatenation across (0...3) is the globally sorted order
+
+- If you've done stable partitioning on already sorted local arrays, each rank can _merge_ its received, already-sorted chunks (k-way merge). Otherwise, just sort once more locally. The concatenation across (0...3) is the globally sorted order
 
 ### 3. Evaluation plan - what and how will you measure and compare
 
@@ -222,13 +256,13 @@ we will fix the input data size (likely to 2^22 elements) and use
 we will vary the input data size as we increase the processor count. We will likely use
 the following pairs:
 
-* (2^16 elements, 16 processors)
-* (2^18 elements, 32 processors)
-* (2^20 elements, 64 processors)
-* (2^22 elements, 128 processors)
-* (2^24 elements, 256 processors)
-* (2^26 elements, 512 processors)
-* (2^28 elements, 1024 processors)
+- (2^16 elements, 16 processors)
+- (2^18 elements, 32 processors)
+- (2^20 elements, 64 processors)
+- (2^22 elements, 128 processors)
+- (2^24 elements, 256 processors)
+- (2^26 elements, 512 processors)
+- (2^28 elements, 1024 processors)
 
 We will carry out these experiments for each of the sorting algorithms
 and compare the performance across different input sizes / processor counts using
