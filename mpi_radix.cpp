@@ -58,12 +58,17 @@ int main(int argc, char *argv[]) {
 				recvElem, numtosend, MPI_INT, 
 				MASTER, MPI_COMM_WORLD);
 
-	printArray(recvElem, numtosend, taskid);	
-	// sequentialRadixSortInt(toSort, numElements);
+		
+	sequentialRadixSortInt(recvElem, numtosend);
+	std::cout << "After Sorting: " << std::endl;
+	printArray(recvElem, numtosend, taskid);
 	// std::cout << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
 	if (recvElem != nullptr) {
 		delete[] recvElem;
 		recvElem = nullptr;
+	}
+	if (taskid == MASTER && toSort!=nullptr) {
+		delete[] toSort;
 	}
 	MPI_Finalize();
 
@@ -194,12 +199,6 @@ void sequentialRadixSortInt(int *&toSort, int numElements) {
 		delete[] toSort;
 		toSort = sortedArray;
 	}
-
-	std::cout << "After: ";
-	for (int i = 0; i < numElements; i++) {
-		std::cout << toSort[i] << " ";
-	}
-	std::cout << std::endl;
 }
 
 void printArray(int *arrayToPrint, int numElements, int rank) {
