@@ -43,6 +43,13 @@ int main(int argc, char *argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
 	MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
 
+	if (totalNumElements%numtasks != 0) {
+		printf("Error: num_procs indivisible by num_elements");
+		int rc;
+		MPI_Abort(MPI_COMM_WORLD, rc);
+		exit(1);
+	}
+
 	localNumElements = totalNumElements/numtasks;
 	int *recvElem = new int[localNumElements];
 
