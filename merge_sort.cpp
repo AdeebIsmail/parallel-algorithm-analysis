@@ -4,6 +4,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+using namespace std;
 int *merge_arrays(int *A, int nA, int *B, int nB) {
   int *result = new int[nA + nB];
   int i = 0, j = 0, k = 0;
@@ -26,6 +27,15 @@ int *merge_arrays(int *A, int nA, int *B, int nB) {
   }
 
   return result;
+}
+
+int validate(int *local_data, int n) {
+  for (int i = 1; i < n; i++) {
+    if (local_data[i] < local_data[i - 1]) {
+      return -1;
+    }
+  }
+  return 1;
 }
 
 void MergeSort(int *arr, int n) {
@@ -97,14 +107,14 @@ int main(int argc, char **argv) {
   int *data = nullptr;
 
   if (rank == 0) {
-    CALI_MARK_BEGIN(data_init_runtime);
+    CALI_MARK_BEGIN("data_init_runtime");
     n = 1 << element;
     data = new int[n];
     srand(101);
     for (int i = 0; i < n; i++) {
       data[i] = rand() % 100;
     }
-    CALI_MARK_END(data_init_runtime);
+    CALI_MARK_END("data_init_runtime");
   }
   // Size of the array
   CALI_MARK_BEGIN("comm");
@@ -169,9 +179,9 @@ int main(int argc, char **argv) {
   }
 
   if (rank == 0) {
-    CALI_MARK_BEGIN(correctness_check);
-
-    CALI_MARK_END(correctness_check);
+    CALI_MARK_BEGIN("correctness_check");
+    cout << validate(local_data, n) << endl;
+    CALI_MARK_END("correctness_check");
   }
 
   delete[] local_data;
