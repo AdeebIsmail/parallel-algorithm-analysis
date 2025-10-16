@@ -1,0 +1,25 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+Rank -1 Array: 0 9944868 21555931 169223065 223323003 326451292 420849593 583961291 710189857 870565179 
+Rank 0 Array: 0 9944868 21555931 169223065 223323003 
+Rank 1 Array: 326451292 420849593 583961291 710189857 870565179 
+double free or corruption (out)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 1 PID 533199 RUNNING AT c261
+=   KILLED BY SIGNAL: 9 (Killed)
+===================================================================================
+slurmstepd: error: Detected 1 oom_kill event in StepId=16790548.0. Some of the step tasks have been OOM Killed.
+srun: error: c261: task 0: Out Of Memory
+I_MPI_JOB_TIMEOUT = -1 second(s): job ending due to startup timeout
+JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
+16790548     JobName              ndsoham                  short                  1      2     RUNNING      1:06         3:54         2025-10-16T10:05  None                     c261

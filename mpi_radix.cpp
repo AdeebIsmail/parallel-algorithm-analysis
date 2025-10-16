@@ -7,6 +7,8 @@
 #include <string>
 #include <iomanip>
 
+#define MASTER 0
+
 enum SortLevel {
 	SORTED,
 	PERTURBED,
@@ -17,29 +19,60 @@ enum SortLevel {
 void initializeIntArray(int *toSort, int numElements, SortLevel level);
 bool isSortedInt(int *toSort, int numElements);
 void sequentialRadixSortInt(int *&toSort, int numElements);
+void printArray(int *arrayToPrint, int numElements, int rank);
 
 
 int main(int argc, char *argv[]) {
+
 	if (argc != 3) {
 		printf("Usage: ./mpi_radix <num_elements> <sort_level>");
 		return 1;
 	}
-	MPI_Init(&argc, &argv);
-	
+
 	int numElements = std::stoi(argv[1]);
 	SortLevel level = static_cast<SortLevel>(std::stoi(argv[2]));
+	int* toSort;
 
-	int* toSort = new int[numElements];
-	initializeIntArray(toSort, numElements, level);
-	std::cout << "Before: ";
-	for (int i = 0; i < numElements; i++) {
-		std::cout << toSort[i] << " ";
+	// communication variables
+	int numtasks,
+		taskid,
+		numtosend;
+
+	MPI_Init(&argc, &argv);
+	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
+	MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+
+	numtosend = numElements/numtasks;
+	int *recvElem = new int[numtosend];
+
+	if (taskid == MASTER) {
+		// initialization code
+		toSort = new int[numElements];
+		initializeIntArray(toSort, numElements, level);
+		printArray(toSort, numElements, -1);
+	} else{
+		// do nothing for now I guess
 	}
-	std::cout << std::endl;
-	sequentialRadixSortInt(toSort, numElements);
-	std::cout << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
-	delete[] toSort;
+
+	MPI_Scatter(toSort, numtosend, MPI_INT, 
+				recvElem, numtosend, MPI_INT, 
+				MASTER, MPI_COMM_WORLD);
+
+	printArray(recvElem, numtosend, taskid);	
+	// sequentialRadixSortInt(toSort, numElements);
+	// std::cout << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
+	if (recvElem != nullptr) {
+		delete[] recvElem;
+		recvElem = nullptr;
+	}
 	MPI_Finalize();
+
+	// fix to sort
+	// if (toSort != nullptr) {
+	// 	delete[] toSort;
+	// 	toSort = nullptr;
+	// }
+	
 }
 
 void initializeIntArray(int *toSort, int numElements, SortLevel level) {
@@ -127,16 +160,7 @@ bool isSortedInt(int *toSort, int numElements) {
 
 
 void sequentialRadixSortInt(int *&toSort, int numElements) {
-	// grace is little endian
-	// std::cout << "Size of int: " << sizeof(int) << std::endl;
-	// int testInt = 65536;
-	// unsigned char *bytes = (unsigned char*)(&testInt);
-	// printf("First byte: %i", *bytes);
-	// printf("Second byte: %i", *(bytes+1));
-	// printf("Third byte: %i", *(bytes+2));
-	// printf("Fourth byte: %i", *(bytes+3));
-	
-	
+		
 	// Sort byte by byte
 	for (int place = 0; place < 4; place++) {
 		int *sortedArray = new int[numElements];
@@ -178,5 +202,11 @@ void sequentialRadixSortInt(int *&toSort, int numElements) {
 	std::cout << std::endl;
 }
 
-
+void printArray(int *arrayToPrint, int numElements, int rank) {
+	std::cout << "Rank " << rank << " Array: ";
+	for (int i = 0; i < numElements; i++) {
+		std::cout << arrayToPrint[i] << " ";
+	}
+	std::cout << std::endl;
+}
 
