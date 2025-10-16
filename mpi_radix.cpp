@@ -29,46 +29,82 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	int numElements = std::stoi(argv[1]);
+	int totalNumElements = std::stoi(argv[1]);
 	SortLevel level = static_cast<SortLevel>(std::stoi(argv[2]));
 	int* toSort;
+	int* sortedArray;
 
 	// communication variables
 	int numtasks,
 		taskid,
-		numtosend;
-
-	int globalHistogram[256];
-	memset(globalHistogram, 0, sizeof(int)*256);
-
-	int globalOffsetIdx[256];
-	memset(globalOffsetIdx, 0, sizeof(int)*256);
+		localNumElements;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
 	MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
 
-	numtosend = numElements/numtasks;
-	int *recvElem = new int[numtosend];
+	localNumElements = totalNumElements/numtasks;
+	int *recvElem = new int[localNumElements];
 
 	if (taskid == MASTER) {
 		// initialization code
-		toSort = new int[numElements];
-		initializeIntArray(toSort, numElements, level);
-		printArray(toSort, numElements, -1);
+		toSort = new int[totalNumElements];
+		sortedArray = new int[totalNumElements];
+		initializeIntArray(toSort, totalNumElements, level);
+		printArray(toSort, totalNumElements, -1);
 	} else{
 		// do nothing for now I guess
 	}
 
-	MPI_Scatter(toSort, numtosend, MPI_INT, 
-				recvElem, numtosend, MPI_INT, 
+	MPI_Scatter(toSort, localNumElements, MPI_INT, 
+				recvElem, localNumElements, MPI_INT, 
 				MASTER, MPI_COMM_WORLD);
 
 	// Implement the algorithm here
-	for (int place = 0; place < 4; place++) {
-		sequentialRadixSortInt(recvElem, numtosend, place);
+	// for (int place = 0; place < 4; place++) {
+		// sequentialRadixSortInt(recvElem, numtosend, place);
+			// construct the local histogram
+			int place = 0;
+			int histogram[256];
+			memset(histogram, 0, sizeof(int)*256);
+			for (int i = 0; i < localNumElements; i++) {
+				// peel the radix
+				unsigned char* bytePtr = (unsigned char *)(&recvElem[i]);
+				unsigned char radix = *(bytePtr + place);
+				histogram[radix]++;
+			}
+			
+			if (taskid == MASTER) {
+				MPI_Reduce(MPI_IN_PLACE, &histogram, 256, MPI_INT, MPI_SUM , MASTER, MPI_COMM_WORLD);
+			} else {
+				MPI_Reduce(&histogram, nullptr, 256, MPI_INT, MPI_SUM, MASTER, MPI_COMM_WORLD);
+			}
 
-	}
+			// build offset table, each index corresponds to 
+			// radix value
+			if (taskid == MASTER) {
+
+				int offsetIdx[256];
+				offsetIdx[0] = 0;
+				
+				for (int i = 1; i < 256; i++) {
+					offsetIdx[i] = offsetIdx[i-1] + histogram[i-1];
+				}
+
+				// put the items in the right place
+				for (int i = 0; i < totalNumElements; i++) {
+					unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
+					unsigned char radix = *(bytePtr + place);
+					int correctIdx = offsetIdx[radix]++;
+					sortedArray[correctIdx] = toSort[i];
+				}
+				printArray(sortedArray, totalNumElements, taskid);
+			}
+			
+
+			
+			
+	// }
 
 	// sequentialRadixSortInt(recvElem, numtosend);
 	// std::cout << "After Sorting: " << std::endl;
@@ -80,6 +116,9 @@ int main(int argc, char *argv[]) {
 	}
 	if (taskid == MASTER && toSort!=nullptr) {
 		delete[] toSort;
+	}
+	if (taskid == MASTER && sortedArray!=nullptr) {
+		delete[] sortedArray;
 	}
 	MPI_Finalize();
 
@@ -175,39 +214,39 @@ bool isSortedInt(int *toSort, int numElements) {
 
 
 
-void sequentialRadixSortInt(int *&toSort, int numElements, int place) {
-	int *sortedArray = new int[numElements];
-	// build the histogram
-	int histogram[256];
-	memset(histogram, 0, sizeof(int)*256);
+// void sequentialRadixSortInt(int *&toSort, int numElements, int place) {
+// 	int *sortedArray = new int[numElements];
+// 	// build the histogram
+// 	int histogram[256];
+// 	memset(histogram, 0, sizeof(int)*256);
 
-	for (int i = 0; i < numElements; i++) {
-		// peel the radix
-		unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
-		unsigned char radix = *(bytePtr + place);
-		histogram[radix]++;
-	}
+// 	for (int i = 0; i < numElements; i++) {
+// 		// peel the radix
+// 		unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
+// 		unsigned char radix = *(bytePtr + place);
+// 		histogram[radix]++;
+// 	}
 
-	// build offset table, each index corresponds to 
-	// radix value
-	int offsetIdx[256];
-	offsetIdx[0] = 0;
-	for (int i = 1; i < 256; i++) {
-		offsetIdx[i] = offsetIdx[i-1] + histogram[i-1];
-	}
+// 	// build offset table, each index corresponds to 
+// 	// radix value
+// 	int offsetIdx[256];
+// 	offsetIdx[0] = 0;
+// 	for (int i = 1; i < 256; i++) {
+// 		offsetIdx[i] = offsetIdx[i-1] + histogram[i-1];
+// 	}
 	
-	// swap each element into correct place
-	for (int i = 0; i < numElements; i++) {
-		unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
-		unsigned char radix = *(bytePtr + place);
-		int correctIdx = offsetIdx[radix]++;
-		sortedArray[correctIdx] = toSort[i];
-	}
-	// figure out mem leak
-	delete[] toSort;
-	toSort = sortedArray;
+// 	// swap each element into correct place
+// 	for (int i = 0; i < numElements; i++) {
+// 		unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
+// 		unsigned char radix = *(bytePtr + place);
+// 		int correctIdx = offsetIdx[radix]++;
+// 		sortedArray[correctIdx] = toSort[i];
+// 	}
+// 	// figure out mem leak
+// 	delete[] toSort;
+// 	toSort = sortedArray;
 	
-}
+// }
 
 void printArray(int *arrayToPrint, int numElements, int rank) {
 	std::cout << "Rank " << rank << " Array: ";
