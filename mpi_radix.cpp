@@ -18,9 +18,7 @@ enum SortLevel {
 
 void initializeIntArray(int *toSort, int numElements, SortLevel level);
 bool isSortedInt(int *toSort, int numElements);
-void sequentialRadixSortInt(int *&toSort, int numElements, int place);
 void printArray(int *arrayToPrint, int numElements, int rank);
-
 
 int main(int argc, char *argv[]) {
 
@@ -57,7 +55,7 @@ int main(int argc, char *argv[]) {
 		// initialization code
 		toSort = new int[totalNumElements];
 		initializeIntArray(toSort, totalNumElements, level);
-		printArray(toSort, totalNumElements, -1);
+		// printArray(toSort, totalNumElements, -1);
 	} else{
 		// do nothing for now I guess
 	}
@@ -109,15 +107,10 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	if (taskid == MASTER) {
-		printArray(sortedArray, totalNumElements, taskid);
-		std::cout << isSortedInt(sortedArray, totalNumElements) << std::endl;
+		std::cout << "Total num elements: " << totalNumElements << std::endl;
+		std::cout << "Array is sorted: " << isSortedInt(sortedArray, totalNumElements) << std::endl;
 	}
 	
-
-	// sequentialRadixSortInt(recvElem, numtosend);
-	// std::cout << "After Sorting: " << std::endl;
-	// printArray(recvElem, numtosend, taskid);
-	// std::cout << " issorted: " << isSortedInt(toSort, numElements) << std::endl;
 	if (recvElem != nullptr) {
 		delete[] recvElem;
 		recvElem = nullptr;
@@ -125,16 +118,8 @@ int main(int argc, char *argv[]) {
 	if (taskid == MASTER && toSort!=nullptr) {
 		delete[] toSort;
 	}
-	// if (taskid == MASTER && sortedArray!=nullptr) {
-	// 	delete[] sortedArray;
-	// }
-	MPI_Finalize();
 
-	// fix to sort
-	// if (toSort != nullptr) {
-	// 	delete[] toSort;
-	// 	toSort = nullptr;
-	// }
+	MPI_Finalize();
 	
 }
 
