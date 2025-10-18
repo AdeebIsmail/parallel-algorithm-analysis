@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		localNumElements;
 
 	int *localArray;
-	int **histograms;
+	int **globalHistogram;
 	int **radixDist;
 	int ***sendRecvDist; // (radix, send, recv)
 
@@ -58,12 +58,12 @@ int main(int argc, char *argv[]) {
 	// printArray(localArray, localNumElements, taskid);
 
 	// init process histograms
-	histograms = new int*[numtasks];
+	globalHistogram = new int*[numtasks];
 	radixDist = new int*[numtasks];
 	for (int i = 0; i < numtasks; i++) {
-		histograms[i] = new int[256];
+		globalHistogram[i] = new int[256];
 		radixDist[i] = new int[256];
-		memset(histograms[i], 0, sizeof(int)*256);
+		memset(globalHistogram[i], 0, sizeof(int)*256);
 		memset(radixDist[i], 0, sizeof(int)*256);
 	}
 
@@ -78,39 +78,40 @@ int main(int argc, char *argv[]) {
 
 	// Build local histogram
 	int place = 0;
-	int* localHist = histograms[taskid];
+	int* localHist = globalHistogram[taskid];
 	for (int i = 0; i < localNumElements; i++) {
 		// peel the radix
 		unsigned char* bytePtr = (unsigned char *)(&localArray[i]);
 		unsigned char radix = *(bytePtr + place);
 		localHist[radix]++;
 	}
-	std::cout << "Local Hist: ";
-	printArray(localHist, 256, taskid);
+	// std::cout << "Local Hist: ";
+	// printArray(localHist, 256, taskid);
 
 	// MPI_Bcast histogram to everyone
 	for (int i = 0; i < numtasks; i++) {
-		MPI_Bcast(histograms[i], 256, MPI_INT, i, MPI_COMM_WORLD);
+		MPI_Bcast(globalHistogram[i], 256, MPI_INT, i, MPI_COMM_WORLD);
 	}
 
 
 	// Calculate how many of each radix each process receives
-	int* globalHistogram = new int[256];
+	int* histogramSum = new int[256];
 	for (int i = 0; i < 256; i++) {
 		int count = 0;
 		for (int proc = 0; proc < numtasks; proc++) {
-			count += histograms[proc][i];
+			count += globalHistogram[proc][i];
 		}
-		globalHistogram[i] = count;
+		histogramSum[i] = count;
 	}
 
 	int currCount = 0;
 	int currProc = 0;
 	for (int i = 0; i < 256; i++) {
-		while (globalHistogram[i] !=0) {
-			radixDist[currProc][i] += 1;
-			currCount += 1;
-			globalHistogram[i] -= 1;
+		while (histogramSum[i] !=0) {
+			int load = std::min(localNumElements, histogramSum[i]);
+			radixDist[currProc][i] += load;
+			currCount += load;
+			histogramSum[i] -= load;
 			if (currCount == localNumElements) {
 				currProc++;
 				currCount = 0;
@@ -119,8 +120,43 @@ int main(int argc, char *argv[]) {
 		
 	}
 	
-	// Calculate how many of each radix each process sends to p1 ... pn
+	for (int i = 0; i < numtasks; i++) {
+		printArray(radixDist[i], 256, taskid);
+	}
 	
+	// int recvProc = 0;
+	// // Calculate how many of each radix each process sends to p1 ... pn
+	// for (int radix = 0; radix < 256; radix++) {
+	// 	for (int sendProc = 0; sendProc < numtasks; sendProc++) {	
+	// 		while (globalHistogram[sendProc][radix] != 0) {
+	// 			// std::cout << sendProc << "->" << recvProc << " " << radix << std::endl;
+	// 			// radixDist[recvProc][radix];
+	// 			// globalHistogram[sendProc][radix];
+	// 			// int numToSend = std::min(radixDist[recvProc][radix], globalHistogram[sendProc][radix]);
+	// 			int numToSend = 0;
+	// 			if (radixDist[recvProc][radix] <= globalHistogram[sendProc][radix]) {
+	// 				numToSend = radixDist[recvProc][radix];
+	// 			} else {
+	// 				numToSend = globalHistogram[sendProc][radix];
+	// 			}
+	// 			radixDist[recvProc][radix] -= numToSend;
+	// 			globalHistogram[sendProc][radix] -= numToSend;
+	// 			sendRecvDist[radix][sendProc][recvProc] = numToSend;
+	// 			if (radixDist[recvProc][radix] == 0) {
+	// 				recvProc++;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	// if (taskid == 0) {
+	// 	for (int i = 0; i < 256; i++) {
+	// 		std::cout << "Radix " << i;
+	// 		for (int j = 0; j < numtasks; j++) {
+	// 			printArray(sendRecvDist[i][j], numtasks, taskid);
+	// 		}
+	// 	}
+	// }
 
 	// Calculate how many of each radix each process receives from p1 ... pn
 	// Recv from everyone smaller than me, send to everyone bigger than me
@@ -132,13 +168,13 @@ int main(int argc, char *argv[]) {
 		localArray = nullptr;
 	}
 
-	if (histograms != nullptr) {
+	if (globalHistogram != nullptr) {
 		for (int i = 0; i < numtasks; i++) {
-			delete[] histograms[i];
-			histograms[i] = nullptr;
+			delete[] globalHistogram[i];
+			globalHistogram[i] = nullptr;
 		}
-		delete[] histograms;
-		histograms = nullptr;
+		delete[] globalHistogram;
+		globalHistogram = nullptr;
 	}
 
 	if (radixDist != nullptr) {
@@ -161,8 +197,8 @@ int main(int argc, char *argv[]) {
 		delete[] sendRecvDist;
 	}
 
-	if (globalHistogram != nullptr) {
-		delete[] globalHistogram;
+	if (histogramSum != nullptr) {
+		delete[] histogramSum;
 	}
 	
 	MPI_Finalize();

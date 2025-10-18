@@ -1,0 +1,524 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+Radix 0Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 1Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 2Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 3Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 4Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 5Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 6Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 7Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 8Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 9Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 10Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 11Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 12Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 13Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 14Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 15Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 16Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 17Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 18Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 19Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 20Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 21Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 22Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 23Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 24Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 25Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 26Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 27Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 28Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 29Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 30Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 31Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 32Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 33Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 34Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 35Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 36Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 37Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 38Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 39Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 40Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 41Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 42Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 43Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 44Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 45Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 46Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 47Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 48Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 49Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 50Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 51Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 52Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 53Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 54Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 55Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 56Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 57Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 58Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 59Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 60Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 61Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 62Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 63Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 64Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 65Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 66Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 67Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 68Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 69Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 70Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 71Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 72Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 73Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 74Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 75Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 76Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 77Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 78Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 79Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 80Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 81Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 82Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 83Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 84Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 85Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 86Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 87Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 88Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 89Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 90Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 91Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 92Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 93Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 94Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 95Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 96Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 97Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 98Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 99Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 100Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 101Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 102Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 103Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 104Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 105Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 106Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 107Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 108Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 109Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 110Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 111Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 112Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 113Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 114Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 115Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 116Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 117Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 118Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 119Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 120Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 121Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 122Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 123Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 124Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 125Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 126Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 127Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 128Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 129Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 130Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 131Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 132Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 133Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 134Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 135Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 136Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 137Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 138Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 139Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 140Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 141Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 142Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 143Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 144Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 145Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 146Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 147Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 148Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 149Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 150Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 151Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 152Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 153Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 154Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 155Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 156Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 157Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 158Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 159Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 160Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 161Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 162Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 163Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 164Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 165Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 166Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 167Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 168Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 169Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 170Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 171Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 172Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 173Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 174Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 175Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 176Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 177Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 178Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 179Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 180Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 181Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 182Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 183Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 184Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 185Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 186Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 187Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 188Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 189Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 190Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 191Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 192Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 193Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 194Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 195Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 196Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 197Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 198Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 199Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 200Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 201Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 202Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 203Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 204Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 205Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 206Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 207Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 208Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 209Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 210Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 211Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 212Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 213Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 214Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 215Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 216Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 217Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 218Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 219Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 220Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 221Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 222Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 223Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 224Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 225Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 226Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 227Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 228Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 229Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 230Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 231Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 232Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 233Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 234Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 235Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 236Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 237Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 238Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 239Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 240Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 241Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 242Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 243Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 244Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 245Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 246Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 247Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 248Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 249Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 250Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 251Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 252Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 253Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 254Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+Radix 255Rank 0 Array: 0 0 
+Rank 0 Array: 0 0 
+JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
+16804727     JobName              ndsoham                  short                  1      1     RUNNING      0:06         0:54         2025-10-18T14:36  None                     c261

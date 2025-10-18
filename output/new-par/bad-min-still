@@ -1,0 +1,48 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+0->0 0
+1->0 0
+0->1 30
+0->2 30
+[c261:2321014:0:2321014] Caught signal 11 (Segmentation fault: address not mapped to object at address 0x78)
+0->0 0
+1->0 0
+0->1 30
+0->2 30
+[c261:2321015:0:2321015] Caught signal 11 (Segmentation fault: address not mapped to object at address 0x78)
+==== backtrace (tid:2321014) ====
+ 0 0x0000000000012990 __funlockfile()  :0
+ 1 0x00000000004047e8 std::min<int>()  ???:0
+ 2 0x0000000000403a97 main()  ???:0
+ 3 0x000000000003a7e5 __libc_start_main()  ???:0
+ 4 0x000000000040328e _start()  ???:0
+=================================
+==== backtrace (tid:2321015) ====
+ 0 0x0000000000012990 __funlockfile()  :0
+ 1 0x00000000004047e8 std::min<int>()  ???:0
+ 2 0x0000000000403a97 main()  ???:0
+ 3 0x000000000003a7e5 __libc_start_main()  ???:0
+ 4 0x000000000040328e _start()  ???:0
+=================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 2321014 RUNNING AT c261
+=   KILLED BY SIGNAL: 11 (Segmentation fault)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 1 PID 2321015 RUNNING AT c261
+=   KILLED BY SIGNAL: 9 (Killed)
+===================================================================================
+JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
+16804712     JobName              ndsoham                  short                  1      1     RUNNING      0:13         0:47         2025-10-18T14:24  None                     c261
