@@ -120,36 +120,27 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	for (int i = 0; i < numtasks; i++) {
-		printArray(radixDist[i], 256, taskid);
-	}
+	// for (int i = 0; i < numtasks; i++) {
+	// 	printArray(radixDist[i], 256, taskid);
+	// }
 	
-	// int recvProc = 0;
-	// // Calculate how many of each radix each process sends to p1 ... pn
-	// for (int radix = 0; radix < 256; radix++) {
-	// 	for (int sendProc = 0; sendProc < numtasks; sendProc++) {	
-	// 		while (globalHistogram[sendProc][radix] != 0) {
-	// 			int numToSend = std::min(radixDist[recvProc][radix], globalHistogram[sendProc][radix]);
-	// 			radixDist[recvProc][radix] -= numToSend;
-	// 			globalHistogram[sendProc][radix] -= numToSend;
-	// 			sendRecvDist[radix][sendProc][recvProc] = numToSend;
-	// 			if (radixDist[recvProc][radix] == 0) {
-	// 				recvProc++;
-	// 			}
-	// 		}
-	// 	}
-	// }
+	int recvProc = 0;
+	// Calculate how many of each radix each process sends to p1 ... pn
+	for (int radix = 0; radix < 256; radix++) {
+		recvProc = 0;
+		for (int sendProc = 0; sendProc < numtasks; sendProc++) {
+			while (globalHistogram[sendProc][radix] != 0) {
+				int numToSend = std::min(radixDist[recvProc][radix], globalHistogram[sendProc][radix]);
+				radixDist[recvProc][radix] -= numToSend;
+				globalHistogram[sendProc][radix] -= numToSend;
+				sendRecvDist[radix][sendProc][recvProc] = numToSend;
+				if (radixDist[recvProc][radix] == 0) {
+					recvProc++;
+				}
+			}
+		}
+	}
 
-	// if (taskid == 0) {
-	// 	for (int i = 0; i < 256; i++) {
-	// 		std::cout << "Radix " << i;
-	// 		for (int j = 0; j < numtasks; j++) {
-	// 			printArray(sendRecvDist[i][j], numtasks, taskid);
-	// 		}
-	// 	}
-	// }
-
-	// Calculate how many of each radix each process receives from p1 ... pn
 	// Recv from everyone smaller than me, send to everyone bigger than me
 	// Recv from everyone bigger than me, send to everyone smaller than me
 
@@ -279,7 +270,7 @@ bool isSortedInt(int *toSort, int numElements) {
  }
 
 void printArray(int *arrayToPrint, int numElements, int rank) {
-	std::cout << "Rank " << rank << " Array: ";
+	std::cout << "Rank " << rank << " Array: " << std::endl;
 	for (int i = 0; i < numElements; i++) {
 		std::cout << arrayToPrint[i] << " ";
 	}
