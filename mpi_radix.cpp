@@ -108,16 +108,16 @@ int main(int argc, char *argv[]) {
 	int currProc = 0;
 	for (int i = 0; i < 256; i++) {
 		while (histogramSum[i] !=0) {
-			int load = std::min(localNumElements, histogramSum[i]);
-			radixDist[currProc][i] += load;
-			currCount += load;
+			int capacity = localNumElements - currCount;
+			int load = std::min(capacity, histogramSum[i]);
+			radixDist[currProc][i]+=load;
+			currCount+=load;
 			histogramSum[i] -= load;
 			if (currCount == localNumElements) {
 				currProc++;
 				currCount = 0;
 			}
 		}
-		
 	}
 	
 	for (int i = 0; i < numtasks; i++) {
@@ -129,16 +129,7 @@ int main(int argc, char *argv[]) {
 	// for (int radix = 0; radix < 256; radix++) {
 	// 	for (int sendProc = 0; sendProc < numtasks; sendProc++) {	
 	// 		while (globalHistogram[sendProc][radix] != 0) {
-	// 			// std::cout << sendProc << "->" << recvProc << " " << radix << std::endl;
-	// 			// radixDist[recvProc][radix];
-	// 			// globalHistogram[sendProc][radix];
-	// 			// int numToSend = std::min(radixDist[recvProc][radix], globalHistogram[sendProc][radix]);
-	// 			int numToSend = 0;
-	// 			if (radixDist[recvProc][radix] <= globalHistogram[sendProc][radix]) {
-	// 				numToSend = radixDist[recvProc][radix];
-	// 			} else {
-	// 				numToSend = globalHistogram[sendProc][radix];
-	// 			}
+	// 			int numToSend = std::min(radixDist[recvProc][radix], globalHistogram[sendProc][radix]);
 	// 			radixDist[recvProc][radix] -= numToSend;
 	// 			globalHistogram[sendProc][radix] -= numToSend;
 	// 			sendRecvDist[radix][sendProc][recvProc] = numToSend;
