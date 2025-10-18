@@ -39,6 +39,8 @@ int main(int argc, char *argv[]) {
 	int **globalHistogram;
 	int **radixDist;
 	int ***sendRecvDist; // (radix, send, recv)
+	int *localOffsetIdx;
+	int *localSortedArray;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
@@ -54,8 +56,8 @@ int main(int argc, char *argv[]) {
 	// init the local array
 	localNumElements = totalNumElements/numtasks;
 	localArray = new int[localNumElements];
+	localSortedArray = new int[localNumElements];
 	initializeIntArray(localArray, localNumElements, level);
-	// printArray(localArray, localNumElements, taskid);
 
 	// init process histograms
 	globalHistogram = new int*[numtasks];
@@ -85,14 +87,32 @@ int main(int argc, char *argv[]) {
 		unsigned char radix = *(bytePtr + place);
 		localHist[radix]++;
 	}
-	// std::cout << "Local Hist: ";
-	// printArray(localHist, 256, taskid);
 
-	// MPI_Bcast histogram to everyone
+	// Create local offset table
+	localOffsetIdx = new int[256];
+	localOffsetIdx[0] = 0;
+	for (int i = 1; i < 256; i++) {
+		localOffsetIdx[i] = localOffsetIdx[i-1] + localHist[i-1];
+	}
+
+	// put local elements in right place
+	for (int i = 0; i < localNumElements; i++) {
+		unsigned char* bytePtr = (unsigned char *)(&localArray[i]);
+		unsigned char radix = *(bytePtr + place);
+		int correctIdx = localOffsetIdx[radix]++;
+		localSortedArray[correctIdx] = localArray[i];
+	}
+
+	// re-build the local offset table to use again
+	localOffsetIdx[0] = 0;
+	for (int i = 1; i < 256; i++) {
+		localOffsetIdx[i] = localOffsetIdx[i-1] + localHist[i-1];
+	}
+
+	// broadcast histogram to everyone
 	for (int i = 0; i < numtasks; i++) {
 		MPI_Bcast(globalHistogram[i], 256, MPI_INT, i, MPI_COMM_WORLD);
 	}
-
 
 	// Calculate how many of each radix each process receives
 	int* histogramSum = new int[256];
@@ -119,11 +139,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	
-	// for (int i = 0; i < numtasks; i++) {
-	// 	printArray(radixDist[i], 256, taskid);
-	// }
-	
+
 	int recvProc = 0;
 	// Calculate how many of each radix each process sends to p1 ... pn
 	for (int radix = 0; radix < 256; radix++) {
@@ -142,6 +158,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Recv from everyone smaller than me, send to everyone bigger than me
+
 	// Recv from everyone bigger than me, send to everyone smaller than me
 
 
@@ -175,8 +192,15 @@ int main(int argc, char *argv[]) {
 				sendRecvDist[i][j] = nullptr;
 			}
 			delete[] sendRecvDist[i];
+			sendRecvDist[i] = nullptr;
 		}
 		delete[] sendRecvDist;
+		sendRecvDist = nullptr;
+	}
+
+	if (localSortedArray != nullptr) {
+		delete[] localSortedArray;
+		localSortedArray = nullptr;
 	}
 
 	if (histogramSum != nullptr) {
