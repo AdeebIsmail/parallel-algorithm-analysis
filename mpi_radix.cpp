@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
 
 	int *localArray;
 	int **histograms;
+	int **radixDist;
+	int ***sendRecvDist; // (radix, send, recv)
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
@@ -57,9 +59,21 @@ int main(int argc, char *argv[]) {
 
 	// init process histograms
 	histograms = new int*[numtasks];
+	radixDist = new int*[numtasks];
 	for (int i = 0; i < numtasks; i++) {
 		histograms[i] = new int[256];
+		radixDist[i] = new int[256];
 		memset(histograms[i], 0, sizeof(int)*256);
+		memset(radixDist[i], 0, sizeof(int)*256);
+	}
+
+	sendRecvDist = new int**[256];
+	for (int i = 0; i < 256; i++) {
+		sendRecvDist[i] = new int*[numtasks];
+		for (int j = 0; j < numtasks; j++) {
+			sendRecvDist[i][j] = new int[numtasks];
+			memset(sendRecvDist[i][j], 0, sizeof(int)*numtasks);
+		}
 	}
 
 	// Build local histogram
@@ -81,7 +95,7 @@ int main(int argc, char *argv[]) {
 
 
 	// Calculate how many of each radix each process receives
-	int globalHistogram[256];
+	int* globalHistogram = new int[256];
 	for (int i = 0; i < 256; i++) {
 		int count = 0;
 		for (int proc = 0; proc < numtasks; proc++) {
@@ -90,13 +104,33 @@ int main(int argc, char *argv[]) {
 		globalHistogram[i] = count;
 	}
 
-	std::cout << "Global Hist: ";
-	printArray(globalHistogram, 256, taskid);
+	int currCount = 0;
+	int currProc = 0;
+	for (int i = 0; i < 256; i++) {
+		while (globalHistogram[i] !=0) {
+			radixDist[currProc][i] += 1;
+			currCount += 1;
+			globalHistogram[i] -= 1;
+			if (currCount == localNumElements) {
+				currProc++;
+				currCount = 0;
+			}
+		}
+		
+	}
 	
 	// Calculate how many of each radix each process sends to p1 ... pn
+	
+
 	// Calculate how many of each radix each process receives from p1 ... pn
 	// Recv from everyone smaller than me, send to everyone bigger than me
 	// Recv from everyone bigger than me, send to everyone smaller than me
+
+
+	if (localArray != nullptr) {
+		delete[] localArray;
+		localArray = nullptr;
+	}
 
 	if (histograms != nullptr) {
 		for (int i = 0; i < numtasks; i++) {
@@ -107,9 +141,28 @@ int main(int argc, char *argv[]) {
 		histograms = nullptr;
 	}
 
-	if (localArray != nullptr) {
-		delete[] localArray;
-		localArray = nullptr;
+	if (radixDist != nullptr) {
+		for (int i = 0; i < numtasks; i++) {
+			delete[] radixDist[i];
+			radixDist[i] = nullptr;
+		}
+		delete[] radixDist;
+		radixDist = nullptr;
+	}
+
+	if (sendRecvDist != nullptr) {
+		for (int i = 0; i < 256; i++) {
+			for (int j = 0; j < numtasks; j++) {
+				delete[] sendRecvDist[i][j];
+				sendRecvDist[i][j] = nullptr;
+			}
+			delete[] sendRecvDist[i];
+		}
+		delete[] sendRecvDist;
+	}
+
+	if (globalHistogram != nullptr) {
+		delete[] globalHistogram;
 	}
 	
 	MPI_Finalize();
