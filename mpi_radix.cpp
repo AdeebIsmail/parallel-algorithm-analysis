@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	initializeIntArray(localArray, localNumElements, level);
 	// printArray(localArray, localNumElements, taskid);
 
-	// init global histograms
+	// init process histograms
 	histograms = new int*[numtasks];
 	for (int i = 0; i < numtasks; i++) {
 		histograms[i] = new int[256];
@@ -71,20 +71,28 @@ int main(int argc, char *argv[]) {
 		unsigned char radix = *(bytePtr + place);
 		localHist[radix]++;
 	}
+	std::cout << "Local Hist: ";
 	printArray(localHist, 256, taskid);
 
 	// MPI_Bcast histogram to everyone
 	for (int i = 0; i < numtasks; i++) {
 		MPI_Bcast(histograms[i], 256, MPI_INT, i, MPI_COMM_WORLD);
 	}
-	
-	
-	for (int i = 0; i < numtasks; i++) {
-		std::cout << "Task " << i << " Hist: ";
-		printArray(histograms[i], 256, taskid); 
-	}
+
 
 	// Calculate how many of each radix each process receives
+	int globalHistogram[256];
+	for (int i = 0; i < 256; i++) {
+		int count = 0;
+		for (int proc = 0; proc < numtasks; proc++) {
+			count += histograms[proc][i];
+		}
+		globalHistogram[i] = count;
+	}
+
+	std::cout << "Global Hist: ";
+	printArray(globalHistogram, 256, taskid);
+	
 	// Calculate how many of each radix each process sends to p1 ... pn
 	// Calculate how many of each radix each process receives from p1 ... pn
 	// Recv from everyone smaller than me, send to everyone bigger than me
