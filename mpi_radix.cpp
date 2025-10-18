@@ -105,6 +105,15 @@ int main(int argc, char *argv[]) {
 			delete[] toSort;
 			toSort = sortedArray;
 		}
+
+		// pseudocode to calculate sending elements correctly
+		// Build local histogram
+		// MPI_Bcast histogram to everyone
+		// Calculate how many of each radix each process receives
+		// Calculate how many of each radix each process sends to p1 ... pn
+		// Calculate how many of each radix each process receives from p1 ... pn
+		// Recv from everyone smaller than me, send to everyone bigger than me
+		// Recv from everyone bigger than me, send to everyone smaller than me
 	}
 	if (taskid == MASTER) {
 		std::cout << "Total num elements: " << totalNumElements << std::endl;
