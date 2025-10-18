@@ -29,13 +29,14 @@ int main(int argc, char *argv[]) {
 
 	int totalNumElements = std::stoi(argv[1]);
 	SortLevel level = static_cast<SortLevel>(std::stoi(argv[2]));
-	int* toSort;
-	int* sortedArray;
 
 	// communication variables
 	int numtasks,
 		taskid,
 		localNumElements;
+
+	int *localArray;
+	int **histograms;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
@@ -48,86 +49,61 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
+	// init the local array
 	localNumElements = totalNumElements/numtasks;
-	int *recvElem = new int[localNumElements];
+	localArray = new int[localNumElements];
+	initializeIntArray(localArray, localNumElements, level);
+	// printArray(localArray, localNumElements, taskid);
 
-	if (taskid == MASTER) {
-		// initialization code
-		toSort = new int[totalNumElements];
-		initializeIntArray(toSort, totalNumElements, level);
-		// printArray(toSort, totalNumElements, -1);
-	} else{
-		// do nothing for now I guess
+	// init global histograms
+	histograms = new int*[numtasks];
+	for (int i = 0; i < numtasks; i++) {
+		histograms[i] = new int[256];
+		memset(histograms[i], 0, sizeof(int)*256);
 	}
 
-	// Implement the algorithm here
-	for (int place = 0; place < 4; place++) {
-		sortedArray = new int[totalNumElements];
-		MPI_Scatter(toSort, localNumElements, MPI_INT, 
-					recvElem, localNumElements, MPI_INT, 
-					MASTER, MPI_COMM_WORLD);
-		
-		// construct the local histogram
-		int histogram[256];
-		memset(histogram, 0, sizeof(int)*256);
-		for (int i = 0; i < localNumElements; i++) {
-			// peel the radix
-			unsigned char* bytePtr = (unsigned char *)(&recvElem[i]);
-			unsigned char radix = *(bytePtr + place);
-			histogram[radix]++;
-		}
-		
-		// construct the global histogram
-		if (taskid == MASTER) {
-			MPI_Reduce(MPI_IN_PLACE, &histogram, 256, MPI_INT, MPI_SUM , MASTER, MPI_COMM_WORLD);
-		} else {
-			MPI_Reduce(&histogram, nullptr, 256, MPI_INT, MPI_SUM, MASTER, MPI_COMM_WORLD);
-		}
-
-		// build global offset table, each index corresponds to 
-		// radix value
-		if (taskid == MASTER) {
-
-			int offsetIdx[256];
-			offsetIdx[0] = 0;
-			
-			for (int i = 1; i < 256; i++) {
-				offsetIdx[i] = offsetIdx[i-1] + histogram[i-1];
-			}
-
-			// put the items in the right place
-			for (int i = 0; i < totalNumElements; i++) {
-				unsigned char* bytePtr = (unsigned char *)(&toSort[i]);
-				unsigned char radix = *(bytePtr + place);
-				int correctIdx = offsetIdx[radix]++;
-				sortedArray[correctIdx] = toSort[i];
-			}
-			delete[] toSort;
-			toSort = sortedArray;
-		}
-
-		// pseudocode to calculate sending elements correctly
-		// Build local histogram
-		// MPI_Bcast histogram to everyone
-		// Calculate how many of each radix each process receives
-		// Calculate how many of each radix each process sends to p1 ... pn
-		// Calculate how many of each radix each process receives from p1 ... pn
-		// Recv from everyone smaller than me, send to everyone bigger than me
-		// Recv from everyone bigger than me, send to everyone smaller than me
+	// Build local histogram
+	int place = 0;
+	int* localHist = histograms[taskid];
+	for (int i = 0; i < localNumElements; i++) {
+		// peel the radix
+		unsigned char* bytePtr = (unsigned char *)(&localArray[i]);
+		unsigned char radix = *(bytePtr + place);
+		localHist[radix]++;
 	}
-	if (taskid == MASTER) {
-		std::cout << "Total num elements: " << totalNumElements << std::endl;
-		std::cout << "Array is sorted: " << isSortedInt(sortedArray, totalNumElements) << std::endl;
+	printArray(localHist, 256, taskid);
+
+	// MPI_Bcast histogram to everyone
+	for (int i = 0; i < numtasks; i++) {
+		MPI_Bcast(histograms[i], 256, MPI_INT, i, MPI_COMM_WORLD);
 	}
 	
-	if (recvElem != nullptr) {
-		delete[] recvElem;
-		recvElem = nullptr;
-	}
-	if (taskid == MASTER && toSort!=nullptr) {
-		delete[] toSort;
+	
+	for (int i = 0; i < numtasks; i++) {
+		std::cout << "Task " << i << " Hist: ";
+		printArray(histograms[i], 256, taskid); 
 	}
 
+	// Calculate how many of each radix each process receives
+	// Calculate how many of each radix each process sends to p1 ... pn
+	// Calculate how many of each radix each process receives from p1 ... pn
+	// Recv from everyone smaller than me, send to everyone bigger than me
+	// Recv from everyone bigger than me, send to everyone smaller than me
+
+	if (histograms != nullptr) {
+		for (int i = 0; i < numtasks; i++) {
+			delete[] histograms[i];
+			histograms[i] = nullptr;
+		}
+		delete[] histograms;
+		histograms = nullptr;
+	}
+
+	if (localArray != nullptr) {
+		delete[] localArray;
+		localArray = nullptr;
+	}
+	
 	MPI_Finalize();
 	
 }
