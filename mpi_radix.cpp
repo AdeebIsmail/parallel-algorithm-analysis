@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
 	localArray = new int[localNumElements];
 	localSortedArray = new int[localNumElements];
 	initializeIntArray(localArray, localNumElements, level);
+	printArray(localArray, localNumElements, taskid);
 
 	// init process histograms
 	globalHistogram = new int*[numtasks];
@@ -157,9 +158,57 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	MPI_Status status;
 	// Recv from everyone smaller than me, send to everyone bigger than me
+	int *recvTracker = localArray;
+	int *sendTracker = localSortedArray;
+	for (int proc = 0; proc < numtasks; proc++) {
+		if (proc < taskid) {
+			for (int radix = 0; radix < 256; radix++) {
+				int numToReceive = sendRecvDist[radix][proc][taskid];
+				if (numToReceive == 0) continue;
+				MPI_Recv(recvTracker, numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
+				recvTracker += numToReceive;
+			}
+		} else if (proc > taskid) {
+			for (int radix = 0; radix < 256; radix++) {
+				int numToSend = sendRecvDist[radix][taskid][proc];
+				if (numToSend == 0) continue;
+				MPI_Send(sendTracker, numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
+				sendTracker += numToSend;
+			}
+		} else {
+			for (int radix = 0; radix < 256; radix++) {
+				int numToPlace = sendRecvDist[radix][taskid][taskid];
+				if (numToPlace == 0) continue;
+				for (int i = 0; i < numToPlace; i++) {
+					*recvTracker = *sendTracker;
+					sendTracker++;
+					recvTracker++;
+				}
+			}
+		}
+	}
+	printArray(localArray, localNumElements, taskid);
 
 	// Recv from everyone bigger than me, send to everyone smaller than me
+	for (int proc = 0; proc < numtasks; proc++) {
+		if (proc > taskid) {
+			for (int radix = 0; radix < 256; radix++) {
+				int numToReceive = sendRecvDist[radix][proc][taskid];
+				if (numToReceive == 0) continue;
+				MPI_Recv(recvTracker, numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
+				recvTracker += numToReceive;
+			}
+		} else if (proc < taskid) {
+			for (int radix = 0; radix < 256; radix++) {
+				int numToSend = sendRecvDist[radix][taskid][proc];
+				if (numToSend == 0) continue;
+				MPI_Send(sendTracker, numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
+				sendTracker += numToSend;
+			}
+		}
+	}
 
 
 	if (localArray != nullptr) {
