@@ -19,6 +19,7 @@
 #
 num_procs=$1
 num_elements=$2
+sort_level=$3
 
 # Load required modules
 module load intel/2022a      # load Intel software stack
@@ -31,6 +32,6 @@ mpicxx -o merge_sort merge_sort.cpp
 
 # Run the program
 CALI_CONFIG="spot(output=${num_procs}.cali)" \
-mpirun -np $num_procs ./merge_sort $num_elements 
+mpirun -np $num_procs ./merge_sort $num_elements $sort_level
 
 squeue -j $SLURM_JOBID

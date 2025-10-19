@@ -5,6 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
+
+enum SortLevel { SORTED, PERTURBED, RANDOM, REVERSED };
+
+// generate data in each process
+// do comparison check after each merge sort,
 int *merge_arrays(int *A, int nA, int *B, int nB) {
   int *result = new int[nA + nB];
   int i = 0, j = 0, k = 0;
@@ -91,11 +96,14 @@ int main(int argc, char **argv) {
 
   int rank, size;
   int element;
+  int sort_level;
 
-  if (argc == 2) {
+  if (argc == 3) {
     element = atoi(argv[1]);
+    sort_level = atoi(argv[2]);
+
   } else {
-    printf("\n Please provide how many elements");
+    printf("\n Missing parameters");
     return 0;
   }
 
@@ -105,35 +113,51 @@ int main(int argc, char **argv) {
 
   int n;
   int *data = nullptr;
+  n = 1 << element;
+  int elements_per_proc = n / size;
+  srand(101);
 
-  if (rank == 0) {
-    CALI_MARK_BEGIN("data_init_runtime");
-    n = 1 << element;
-    data = new int[n];
-    srand(101);
-    for (int i = 0; i < n; i++) {
-      data[i] = rand() % 100;
+  CALI_MARK_BEGIN("data_init_runtime");
+  data = new int[elements_per_proc];
+
+  if (sort_level == RANDOM) {
+    for (int i = 0; i < elements_per_proc; i++) {
+      data[i] = rand() % 1000;
     }
-    CALI_MARK_END("data_init_runtime");
+  } else if (sort_level == SORTED) {
+    int global_start = rank * elements_per_proc;
+    int index = 0;
+    for (int i = global_start; i < global_start + elements_per_proc; i++) {
+      data[index] = i;
+      index += 1;
+    }
+  } else if (sort_level == REVERSED) {
+    int global_start = (size - rank - 1) * elements_per_proc;
+    int index = 0;
+    for (int i = global_start + elements_per_proc - 1; i >= global_start; i--) {
+      data[index] = i;
+      index += 1;
+    }
+  } else if (sort_level == PERTURBED) {
+    int global_start = rank * elements_per_proc;
+    int index = 0;
+    for (int i = global_start; i < global_start + elements_per_proc; i++) {
+      data[index] = i;
+      index += 1;
+    }
+    int num_swaps = elements_per_proc / 100;
+    for (int s = 0; s < num_swaps; s++) {
+      int idx = rand() % (elements_per_proc - 1);
+      int temp = data[idx];
+      data[idx] = data[idx + 1];
+      data[idx + 1] = temp;
+    }
   }
-  // Size of the array
-  CALI_MARK_BEGIN("comm");
-  CALI_MARK_BEGIN("comm_small_Bcast");
-  MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
-  CALI_MARK_END("comm_small_Bcast");
-  CALI_MARK_END("comm");
+
+  CALI_MARK_END("data_init_runtime");
 
   int local_n = n / size;
-  int *local_data = new int[local_n];
-
-  // Split up data of size local_n and send to each process, receives into
-  // local_data and is of size local_n
-  CALI_MARK_BEGIN("comm");
-  CALI_MARK_BEGIN("comm_large_Scatter");
-  MPI_Scatter(data, local_n, MPI_INT, local_data, local_n, MPI_INT, 0,
-              MPI_COMM_WORLD);
-  CALI_MARK_END("comm_large_Scatter");
-  CALI_MARK_END("comm");
+  int *local_data = data;
 
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_small_merge_sort");
@@ -178,15 +202,15 @@ int main(int argc, char **argv) {
     step *= 2;
   }
 
-  if (rank == 0) {
-    CALI_MARK_BEGIN("correctness_check");
-    cout << validate(local_data, n) << endl;
-    CALI_MARK_END("correctness_check");
-  }
+  // if (rank == 0) {
+  //   CALI_MARK_BEGIN("correctness_check");
+  //   cout << validate(local_data, n) << endl;
+  //   CALI_MARK_END("correctness_check");
+  // }
 
   delete[] local_data;
-  if (rank == 0)
-    delete[] data;
+  // if (rank == 0)
+  //   delete[] data;
 
   MPI_Finalize();
   return 0;
