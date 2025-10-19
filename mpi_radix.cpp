@@ -100,20 +100,25 @@ int main(int argc, char *argv[]) {
 		CALI_MARK_BEGIN(comp);
 		// Build local histogram
 		int* localHist = globalHistogram[taskid];
+		CALI_MARK_BEGIN(compLarge);
 		for (int i = 0; i < localNumElements; i++) {
 			// peel the radix
 			unsigned char* bytePtr = (unsigned char *)(&localArray[i]);
 			unsigned char radix = *(bytePtr + place);
 			localHist[radix]++;
 		}
+		CALI_MARK_END(compLarge);
 
+		CALI_MARK_BEGIN(compSmall);
 		// Create local offset table
 		localOffsetIdx = new int[256];
 		localOffsetIdx[0] = 0;
 		for (int i = 1; i < 256; i++) {
 			localOffsetIdx[i] = localOffsetIdx[i-1] + localHist[i-1];
 		}
+		CALI_MARK_END(compSmall);
 
+		CALI_MARK_BEGIN(compLarge);
 		// put local elements in right place
 		for (int i = 0; i < localNumElements; i++) {
 			unsigned char* bytePtr = (unsigned char *)(&localArray[i]);
@@ -121,15 +126,23 @@ int main(int argc, char *argv[]) {
 			int correctIdx = localOffsetIdx[radix]++;
 			localSortedArray[correctIdx] = localArray[i];
 		}
+		CALI_MARK_END(compLarge);
 		CALI_MARK_END(comp);
 
+		CALI_MARK_BEGIN(comm);
+		CALI_MARK_BEGIN(commSmall);
 		// broadcast histogram to everyone
 		for (int i = 0; i < numtasks; i++) {
 			MPI_Bcast(globalHistogram[i], 256, MPI_INT, i, MPI_COMM_WORLD);
 		}
+		CALI_MARK_END(commSmall);
+		CALI_MARK_END(comm);
 
+		
 		// reduce the histogram
 		int* histogramSum = new int[256];
+		CALI_MARK_BEGIN(comp);
+		CALI_MARK_BEGIN(compLarge);
 		for (int i = 0; i < 256; i++) {
 			int count = 0;
 			for (int proc = 0; proc < numtasks; proc++) {
@@ -171,6 +184,8 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
+		CALI_MARK_END(compLarge);
+		CALI_MARK_END(comp);
 
 		MPI_Status status;
 		int *recvTracker = localArray;
@@ -178,6 +193,8 @@ int main(int argc, char *argv[]) {
 
 		// Recv from everyone smaller than me, then send to everyone smaller than me
 		// Send to everyone bigger than me, then recv from everyone bigger than me
+		CALI_MARK_BEGIN(comm);
+		CALI_MARK_BEGIN(commLarge);
 		for (int radix = 0; radix < 256; radix++) {
 			for (int pivotProc = 0; pivotProc < numtasks; pivotProc++) {
 				int numToSend = sendRecvDist[radix][taskid][pivotProc];
@@ -211,6 +228,8 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
+		CALI_MARK_END(commLarge);
+		CALI_MARK_END(comm);
 
 		if (localSortedArray != nullptr) {
 			delete[] localSortedArray;
