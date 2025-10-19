@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <cassert>
 
-#define MASTER 0
+#define GlOBAL_MAX_NUMBER 400e6
 
 enum SortLevel {
 	SORTED,
@@ -17,7 +17,7 @@ enum SortLevel {
 	REVERSED 
 };
 
-void initializeIntArray(int *arrayToInit, int numElements, SortLevel level);
+void initializeIntArray(int *arrayToInit, int numElements, SortLevel level, int taskid, int numtasks);
 bool isLocallySorted(int *arrayToCheck, int numElements);
 void printArray(int *arrayToPrint, int numElements, int rank);
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
 	// init the local array
 	localNumElements = totalNumElements/numtasks;
 	localArray = new int[localNumElements];
-	initializeIntArray(localArray, localNumElements, level);
+	initializeIntArray(localArray, localNumElements, level, taskid, numtasks);
 	// printArray(localArray, localNumElements, taskid);
 
 	for (int place = 0; place < 4; place++) {
@@ -252,12 +252,12 @@ int main(int argc, char *argv[]) {
 		MPI_Bcast(&firstElements[proc], 1, MPI_INT, proc, MPI_COMM_WORLD);
 	}
 
-	if (taskid == 0) {
-		for (int i = 0; i < numtasks; i++) {
-			std::cout << firstElements[i] << " " << std::flush;
-		}
-		std::cout << std::endl;
-	}
+	// if (taskid == 0) {
+	// 	for (int i = 0; i < numtasks; i++) {
+	// 		std::cout << firstElements[i] << " " << std::flush;
+	// 	}
+	// 	std::cout << std::endl;
+	// }
 	
 	assert(isLocallySorted(localArray, localNumElements));
 	if (taskid != numtasks-1) {
@@ -273,13 +273,24 @@ int main(int argc, char *argv[]) {
 	MPI_Finalize();
 }
 
-void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
-	int biggest_number = 400e6;
-	int max_increment = floor((double)(biggest_number)/(double)(numElements));
+void initializeIntArray(int *arrayToInit, int numElements, SortLevel level, int taskid, int numtasks) {
+	
+	int localMaxNumber = ceil(GlOBAL_MAX_NUMBER * ((double)(taskid+1))/((double)numtasks));
+	int localMinNumber;
+
+	if (taskid > 0) {
+		int prevMaxNumber = ceil(GlOBAL_MAX_NUMBER * ((double)(taskid))/((double)numtasks));
+		localMinNumber = prevMaxNumber;
+	} else {
+		localMinNumber = 0;
+	}
+
+	int maxIncrement = floor((double)(localMaxNumber-localMinNumber)/(double)(numElements));
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> random_numbers(0, biggest_number);
-	std::uniform_int_distribution<> increment(0, max_increment);
+	std::uniform_int_distribution<> random_numbers(0, GlOBAL_MAX_NUMBER);
+	std::uniform_int_distribution<> increment(0, maxIncrement);
 	std::uniform_int_distribution<> indexes(0, numElements-1);
 
 	switch (level)
@@ -290,7 +301,7 @@ void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
 			if (i != 0) {
 				arrayToInit[i] = arrayToInit[i-1]+increment(gen);
 			} else {
-				arrayToInit[i] = 0;
+				arrayToInit[i] = localMinNumber;
 			}
 		}
 		break;
@@ -302,7 +313,7 @@ void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
 				if (i != 0) {
 					arrayToInit[i] = arrayToInit[i-1]+increment(gen);
 				} else {
-					arrayToInit[i] = 0;
+					arrayToInit[i] = localMinNumber;
 				}
 			}
 			// randomly swap 1% of all indices
@@ -313,7 +324,7 @@ void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
 				int indx1 = indexes(gen);
 				int indx2 = indexes(gen);
 
-				while (indx1 == indx2) {
+				while (indx1 == indx2 && numElements > 1) {
 					indx2 = indexes(gen);
 				}
 
@@ -327,15 +338,15 @@ void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
 			arrayToInit[i] = random_numbers(gen);
 		}
 		break;
-	case REVERSED:
-		for (int i = numElements-1; i >= 0; i--) {
-			if (i!=numElements-1) {
-				arrayToInit[i] = arrayToInit[i+1]+increment(gen);
-			} else {
-				arrayToInit[i] = 0;
-			}
-		}
-		break;
+	// case REVERSED:
+	// 	for (int i = numElements-1; i >= 0; i--) {
+	// 		if (i!=numElements-1) {
+	// 			arrayToInit[i] = arrayToInit[i+1]+increment(gen);
+	// 		} else {
+	// 			arrayToInit[i] = localMinNumber;
+	// 		}
+	// 	}
+	// 	break;
 	default:
 		break;
 	}
