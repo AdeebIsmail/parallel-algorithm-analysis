@@ -6,6 +6,7 @@
 #include <random>
 #include <string>
 #include <iomanip>
+#include <cassert>
 
 #define MASTER 0
 
@@ -16,8 +17,8 @@ enum SortLevel {
 	REVERSED 
 };
 
-void initializeIntArray(int *toSort, int numElements, SortLevel level);
-bool isSortedInt(int *toSort, int numElements);
+void initializeIntArray(int *arrayToInit, int numElements, SortLevel level);
+bool isLocallySorted(int *arrayToCheck, int numElements);
 void printArray(int *arrayToPrint, int numElements, int rank);
 
 int main(int argc, char *argv[]) {
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]) {
 	localNumElements = totalNumElements/numtasks;
 	localArray = new int[localNumElements];
 	initializeIntArray(localArray, localNumElements, level);
-	printArray(localArray, localNumElements, taskid);
+	// printArray(localArray, localNumElements, taskid);
 
 	for (int place = 0; place < 4; place++) {
 		localSortedArray = new int[localNumElements];
@@ -243,8 +244,26 @@ int main(int argc, char *argv[]) {
 
 	}
 
-	printArray(localArray, localNumElements, taskid);
-	std::cout << "Rank " << taskid << "is Sorted: " << isSortedInt(localArray, localNumElements) << std::endl;
+	// check that the array is globally sorted
+	int *firstElements = new int[numtasks];
+	firstElements[taskid] = localArray[0];
+
+	for (int proc = 0; proc < numtasks; proc++) {
+		MPI_Bcast(&firstElements[proc], 1, MPI_INT, proc, MPI_COMM_WORLD);
+	}
+
+	if (taskid == 0) {
+		for (int i = 0; i < numtasks; i++) {
+			std::cout << firstElements[i] << " " << std::flush;
+		}
+		std::cout << std::endl;
+	}
+	
+	assert(isLocallySorted(localArray, localNumElements));
+	if (taskid != numtasks-1) {
+		bool correctOrder = localArray[localNumElements-1] <= firstElements[taskid+1];
+		assert(correctOrder);
+	}
 
 	if (localArray != nullptr) {
 		delete[] localArray;
@@ -252,11 +271,10 @@ int main(int argc, char *argv[]) {
 	}
 	
 	MPI_Finalize();
-	
 }
 
 void initializeIntArray(int *toSort, int numElements, SortLevel level) {
-	int biggest_number = 100;
+	int biggest_number = 400e6;
 	int max_increment = floor((double)(biggest_number)/(double)(numElements));
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -324,12 +342,12 @@ void initializeIntArray(int *toSort, int numElements, SortLevel level) {
 }
 
 
-bool isSortedInt(int *toSort, int numElements) {
+bool isLocallySorted(int *arrayToCheck, int numElements) {
 
 	bool sorted = true;
 	
 	for (int i = 1; i < numElements-1; i++) {
-		if (toSort[i] > toSort[i+1]) {
+		if (arrayToCheck[i] > arrayToCheck[i+1]) {
 		   sorted = false;
 		}
 	}
