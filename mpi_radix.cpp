@@ -22,7 +22,7 @@ bool isLocallySorted(int *arrayToCheck, int numElements);
 void printArray(int *arrayToPrint, int numElements, int rank);
 
 int main(int argc, char *argv[]) {
-
+	CALI_CXX_MARK_FUNCTION;
 	if (argc != 3) {
 		printf("Usage: ./mpi_radix <num_elements> <sort_level>");
 		return 1;
@@ -42,6 +42,16 @@ int main(int argc, char *argv[]) {
 	int ***sendRecvDist; // (radix, send, recv)
 	int *localOffsetIdx;
 	int *localSortedArray;
+	
+	// caliper region names
+	const char* dataInit = "data_init_runtime";
+	const char* corrCheck = "correctness_check";
+	const char* comm = "comm";
+	const char* commSmall = "comm_small";
+	const char* commLarge = "comm_large";
+	const char* comp = "comp";
+	const char* compSmall = "comp_small";
+	const char* compLarge = "comp_large";
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &taskid);
@@ -53,10 +63,16 @@ int main(int argc, char *argv[]) {
 		MPI_Abort(MPI_COMM_WORLD, rc);
 		exit(1);
 	}
+
+	cali::ConfigManager mgr;
+	mgr.start();
+
 	// init the local array
 	localNumElements = totalNumElements/numtasks;
 	localArray = new int[localNumElements];
+	CALI_MARK_BEGIN(dataInit);
 	initializeIntArray(localArray, localNumElements, level, taskid, numtasks);
+	CALI_MARK_END(dataInit);
 
 	for (int place = 0; place < 4; place++) {
 		localSortedArray = new int[localNumElements];
@@ -81,6 +97,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
+		CALI_MARK_BEGIN(comp);
 		// Build local histogram
 		int* localHist = globalHistogram[taskid];
 		for (int i = 0; i < localNumElements; i++) {
@@ -104,6 +121,7 @@ int main(int argc, char *argv[]) {
 			int correctIdx = localOffsetIdx[radix]++;
 			localSortedArray[correctIdx] = localArray[i];
 		}
+		CALI_MARK_END(comp);
 
 		// broadcast histogram to everyone
 		for (int i = 0; i < numtasks; i++) {
@@ -247,15 +265,17 @@ int main(int argc, char *argv[]) {
 	int *firstElements = new int[numtasks];
 	firstElements[taskid] = localArray[0];
 
+	CALI_MARK_BEGIN(corrCheck);
 	for (int proc = 0; proc < numtasks; proc++) {
 		MPI_Bcast(&firstElements[proc], 1, MPI_INT, proc, MPI_COMM_WORLD);
 	}
-	
+
 	assert(isLocallySorted(localArray, localNumElements));
 	if (taskid != numtasks-1) {
 		bool correctOrder = localArray[localNumElements-1] <= firstElements[taskid+1];
 		assert(correctOrder);
 	}
+	CALI_MARK_END(corrCheck);
 
 	if (localArray != nullptr) {
 		delete[] localArray;
@@ -266,7 +286,25 @@ int main(int argc, char *argv[]) {
 		delete[] firstElements;
 		firstElements = nullptr;
 	}
-	
+
+	adiak::init(NULL);
+	adiak::launchdate();    // launch date of the job
+	adiak::libraries();     // Libraries used
+	adiak::cmdline();       // Command line used to launch the job
+	adiak::clustername();   // Name of the cluster
+	adiak::value("algorithm", "radix"); // The name of the algorithm you are using (e.g., "merge", "bitonic")
+	adiak::value("programming_model", "mpi"); // e.g. "mpi"
+	adiak::value("data_type", "int"); // The datatype of input elements (e.g., double, int, float)
+	adiak::value("size_of_data_type", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+	adiak::value("input_size", totalNumElements); // The number of elements in input dataset (1000)
+	// adiak::value("input_type", level); // For sorting, this would be choices: ("Sorted", "ReverseSorted", "Random", "1_perc_perturbed")
+	adiak::value("num_procs", numtasks); // The number of processors (MPI ranks)
+	// adiak::value("scalability", scalability); // The scalability of your algorithm. choices: ("strong", "weak")
+	adiak::value("group_num", 6); // The number of your group (integer, e.g., 1, 10)
+	adiak::value("implementation_source", "https://codercorner.com/RadixSortRevisited.htm"); // Where you got the source code of your algorithm. choices: ("online", "ai", "handwritten").
+
+	mgr.stop();
+	mgr.flush();
 	MPI_Finalize();
 }
 
