@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 	initializeIntArray(localArray, localNumElements, level);
 	printArray(localArray, localNumElements, taskid);
 
-	for (int place = 0; place < 1; place++) {
+	for (int place = 0; place < 4; place++) {
 		localSortedArray = new int[localNumElements];
 		
 		// init global histogram
@@ -155,133 +155,44 @@ int main(int argc, char *argv[]) {
 		}
 
 		MPI_Status status;
-		// int *recvTracker = localArray;
-		// int *sendTracker = localSortedArray;
-		int *recvOffset = new int[numtasks];
-		recvOffset[numtasks-1] = 0;
-		int *sendOffset = new int[numtasks];
-		sendOffset[numtasks-1] = 0;
-		// Recv from everyone bigger than me, send to everyone smaller than me
+		int *recvTracker = localArray;
+		int *sendTracker = localSortedArray;
+
+		// Recv from everyone smaller than me, then send to everyone smaller than me
+		// Send to everyone bigger than me, then recv from everyone bigger than me
 		for (int radix = 0; radix < 256; radix++) {
-			if (radix > 0) {
-				recvOffset[0] = recvOffset[numtasks-1] + sendRecvDist[radix-1][numtasks-1][taskid];
-				sendOffset[0] = sendOffset[numtasks-1] + sendRecvDist[radix-1][taskid][numtasks-1];
-			} else {
-				recvOffset[0] = recvOffset[numtasks-1];
-				sendOffset[0] = sendOffset[numtasks-1];
-			}
-
-			for (int proc = 1; proc < numtasks; proc++) {
-				recvOffset[proc] = recvOffset[proc-1] + sendRecvDist[radix][proc-1][taskid];
-			}
-			
-			for (int proc = 1; proc < numtasks; proc++) {
-				sendOffset[proc] = sendOffset[proc-1] + sendRecvDist[radix][taskid][proc-1];
-			}
-
-			for (int proc = 0; proc < numtasks; proc++) {
-				if (proc > taskid) {
-					int numToReceive = sendRecvDist[radix][proc][taskid];
-					if (numToReceive == 0) continue;
-					MPI_Recv(localArray+recvOffset[proc], numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
-				} else if (proc < taskid) {
-					int numToSend = sendRecvDist[radix][taskid][proc];
-					if (numToSend == 0) continue;
-					MPI_Send(localSortedArray+sendOffset[proc], numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
-				} else {
-					int numToPlace = sendRecvDist[radix][taskid][taskid];
-					if (numToPlace == 0) continue;
-					for (int i = 0; i < numToPlace; i++) {
-						int sendIdx = sendOffset[taskid] + i;
-						int recvIdx = sendOffset[taskid] + i;
-						localArray[recvIdx] = localSortedArray[sendIdx];
+			for (int pivotProc = 0; pivotProc < numtasks; pivotProc++) {
+				int numToSend = sendRecvDist[radix][taskid][pivotProc];
+				int numToRecv = sendRecvDist[radix][pivotProc][taskid];
+				if (pivotProc > taskid) {
+					// send first, then recv
+					if (numToSend > 0) {
+						MPI_Send(sendTracker, numToSend, MPI_INT, pivotProc, radix, MPI_COMM_WORLD);
+						sendTracker += numToSend;
 					}
+					if (numToRecv > 0) {
+						MPI_Recv(recvTracker, numToRecv, MPI_INT, pivotProc, radix, MPI_COMM_WORLD, &status);
+						recvTracker += numToRecv;
+					}
+				} else if (pivotProc < taskid) {
+					// recv first, then send
+					if (numToRecv > 0) {
+						MPI_Recv(recvTracker, numToRecv, MPI_INT, pivotProc, radix, MPI_COMM_WORLD, &status);
+						recvTracker += numToRecv;
+					}
+					if (numToSend > 0) {
+						MPI_Send(sendTracker , numToSend, MPI_INT, pivotProc, radix, MPI_COMM_WORLD);
+						sendTracker += numToSend;
+					}
+				} else {
+					if (numToSend > 0) {
+						std::memcpy(recvTracker, sendTracker, numToSend*sizeof(int));
+						recvTracker += numToRecv;
+						sendTracker += numToSend;
+					} 
 				}
 			}
 		}
-		
-		recvOffset[numtasks-1] = 0;
-		sendOffset[numtasks-1] = 0;
-		// Recv from everyone smaller than me, send to everyone bigger than me
-		for (int radix = 0; radix < 256; radix++) {
-			if (radix > 0) {
-				recvOffset[0] = recvOffset[numtasks-1] + sendRecvDist[radix-1][numtasks-1][taskid];
-				sendOffset[0] = sendOffset[numtasks-1] + sendRecvDist[radix-1][taskid][numtasks-1];
-			} else {
-				recvOffset[0] = recvOffset[numtasks-1];
-				sendOffset[0] = sendOffset[numtasks-1];
-			}
-
-			for (int proc = 1; proc < numtasks; proc++) {
-				recvOffset[proc] = recvOffset[proc-1] + sendRecvDist[radix][proc-1][taskid];
-			}
-			
-			for (int proc = 1; proc < numtasks; proc++) {
-				sendOffset[proc] = sendOffset[proc-1] + sendRecvDist[radix][taskid][proc-1];
-			}
-			for (int proc = 0; proc < numtasks; proc++) {
-				if (proc > taskid) {
-					int numToSend = sendRecvDist[radix][taskid][proc];
-					if (numToSend == 0) continue;
-					MPI_Send(localSortedArray+sendOffset[proc], numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
-				} else if (proc < taskid) {
-					int numToReceive = sendRecvDist[radix][proc][taskid];
-					if (numToReceive == 0) continue;
-					MPI_Recv(localArray+recvOffset[proc], numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
-				}
-			}
-		}
-		delete[] recvOffset;
-		recvOffset = nullptr;
-		delete[] sendOffset;
-		sendOffset = nullptr;
-
-		// for (int proc = 0; proc < numtasks; proc++) {
-		// 	if (proc > taskid) {
-		// 		for (int radix = 0; radix < 256; radix++) {
-		// 			int numToReceive = sendRecvDist[radix][proc][taskid];
-		// 			if (numToReceive == 0) continue;
-		// 			MPI_Recv(recvTracker, numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
-		// 			recvTracker += numToReceive;
-		// 		}
-		// 	} else if (proc < taskid) {
-		// 		for (int radix = 0; radix < 256; radix++) {
-		// 			int numToSend = sendRecvDist[radix][taskid][proc];
-		// 			if (numToSend == 0) continue;
-		// 			MPI_Send(sendTracker, numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
-		// 			sendTracker += numToSend;
-		// 		}
-		// 	} else {
-		// 		for (int radix = 0; radix < 256; radix++) {
-		// 			int numToPlace = sendRecvDist[radix][taskid][taskid];
-		// 			if (numToPlace == 0) continue;
-		// 			for (int i = 0; i < numToPlace; i++) {
-		// 				*recvTracker = *sendTracker;
-		// 				sendTracker++;
-		// 				recvTracker++;
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		// Recv from everyone smaller than me, send to everyone bigger than me
-		// for (int proc = 0; proc < numtasks; proc++) {
-		// 	if (proc < taskid) {
-		// 		for (int radix = 0; radix < 256; radix++) {
-		// 			int numToReceive = sendRecvDist[radix][proc][taskid];
-		// 			if (numToReceive == 0) continue;
-		// 			MPI_Recv(recvTracker, numToReceive, MPI_INT, proc, radix, MPI_COMM_WORLD, &status);
-		// 			recvTracker += numToReceive;
-		// 		}
-		// 	} else if (proc > taskid) {
-		// 		for (int radix = 0; radix < 256; radix++) {
-		// 			int numToSend = sendRecvDist[radix][taskid][proc];
-		// 			if (numToSend == 0) continue;
-		// 			MPI_Send(sendTracker, numToSend, MPI_INT, proc, radix, MPI_COMM_WORLD);
-		// 			sendTracker += numToSend;
-		// 		}
-		// 	}
-		// }
 
 		if (localSortedArray != nullptr) {
 			delete[] localSortedArray;
@@ -333,7 +244,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printArray(localArray, localNumElements, taskid);
-	// std::cout << "Is Sorted: " << isSortedInt(localArray, localNumElements) << std::endl;
+	std::cout << "Rank " << taskid << "is Sorted: " << isSortedInt(localArray, localNumElements) << std::endl;
 
 	if (localArray != nullptr) {
 		delete[] localArray;
