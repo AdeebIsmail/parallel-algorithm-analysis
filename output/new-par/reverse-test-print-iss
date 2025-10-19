@@ -1,0 +1,20 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+Rank 0 Array: 
+1259233887 603199795 0 
+Rank 1 Array: 
+827684295 633800985 0 
+Rank 0 Array: 
+0 0 Rank 633800985 
+1 Array: 
+827684295 633800985 0 
+JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
+16805046     JobName              ndsoham                  short                  1      2     RUNNING      0:05         0:55         2025-10-18T17:45  None                     c262
