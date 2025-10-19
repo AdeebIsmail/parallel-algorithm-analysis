@@ -273,7 +273,7 @@ int main(int argc, char *argv[]) {
 	MPI_Finalize();
 }
 
-void initializeIntArray(int *toSort, int numElements, SortLevel level) {
+void initializeIntArray(int *arrayToInit, int numElements, SortLevel level) {
 	int biggest_number = 400e6;
 	int max_increment = floor((double)(biggest_number)/(double)(numElements));
 	std::random_device rd;
@@ -288,9 +288,9 @@ void initializeIntArray(int *toSort, int numElements, SortLevel level) {
 		// initialize a sorted array
 		for (int i = 0; i < numElements; i++) {
 			if (i != 0) {
-				toSort[i] = toSort[i-1]+increment(gen);
+				arrayToInit[i] = arrayToInit[i-1]+increment(gen);
 			} else {
-				toSort[i] = 0;
+				arrayToInit[i] = 0;
 			}
 		}
 		break;
@@ -300,9 +300,9 @@ void initializeIntArray(int *toSort, int numElements, SortLevel level) {
 			// initialize a sorted array
 			for (int i = 0; i < numElements; i++) {
 				if (i != 0) {
-					toSort[i] = toSort[i-1]+increment(gen);
+					arrayToInit[i] = arrayToInit[i-1]+increment(gen);
 				} else {
-					toSort[i] = 0;
+					arrayToInit[i] = 0;
 				}
 			}
 			// randomly swap 1% of all indices
@@ -317,22 +317,22 @@ void initializeIntArray(int *toSort, int numElements, SortLevel level) {
 					indx2 = indexes(gen);
 				}
 
-				std::swap(toSort[indx1], toSort[indx2]);
+				std::swap(arrayToInit[indx1], arrayToInit[indx2]);
 			}
 		}
 		break;
 	case RANDOM:
 		// initialize a randomly sorted array
 		for (int i = 0; i < numElements; i++) {
-			toSort[i] = random_numbers(gen);
+			arrayToInit[i] = random_numbers(gen);
 		}
 		break;
 	case REVERSED:
 		for (int i = numElements-1; i >= 0; i--) {
 			if (i!=numElements-1) {
-				toSort[i] = toSort[i+1]+increment(gen);
+				arrayToInit[i] = arrayToInit[i+1]+increment(gen);
 			} else {
-				toSort[i] = 0;
+				arrayToInit[i] = 0;
 			}
 		}
 		break;
