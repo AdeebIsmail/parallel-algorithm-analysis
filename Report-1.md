@@ -120,10 +120,8 @@ Include MPI calls you will use to coordinate between processes.
 
 #### Pseudocode (SPMD, Broadcast)
 
-    IF master:
-      generate data
+    generate data globally, split up to each process
 
-    MPI_Scatter all data to each process
     MergeSort() each array
     step = 1;
     WHILE (step < size)
@@ -131,6 +129,7 @@ Include MPI calls you will use to coordinate between processes.
         recv_proc = rank + step recv from its neighbor
         MPI_Recv()
         merge() the two arrays
+        validate() each merge array
       ELSE
         send_proc = rank - step send to its neighbor
         MPI_Send()
@@ -270,78 +269,15 @@ graphics. We will also include graphics that compare performance between algorit
 
 ### 4. Caliper instrumentation
 
-Please use the caliper build `/scratch/group/csce-435-f25/Caliper/caliper/share/cmake/caliper`
-(same as lab2 build.sh) to collect caliper files for each experiment you run.
-
-Your Caliper annotations should result in the following calltree
-(use `Thicket.tree()` to see the calltree):
-
-```
-main
-|_ data_init_X      # X = runtime OR io
-|_ comm
-|    |_ comm_small
-|    |_ comm_large
-|_ comp
-|    |_ comp_small
-|    |_ comp_large
-|_ correctness_check
-```
-
-Required region annotations:
-
-- `main` - top-level main function.
-  - `data_init_X` - the function where input data is generated or read in from file. Use _data_init_runtime_ if you are generating the data during the program, and _data_init_io_ if you are reading the data from a file.
-  - `correctness_check` - function for checking the correctness of the algorithm output (e.g., checking if the resulting data is sorted).
-  - `comm` - All communication-related functions in your algorithm should be nested under the `comm` region.
-    - Inside the `comm` region, you should create regions to indicate how much data you are communicating (i.e., `comm_small` if you are sending or broadcasting a few values, `comm_large` if you are sending all of your local values).
-    - Notice that auxillary functions like MPI_init are not under here.
-  - `comp` - All computation functions within your algorithm should be nested under the `comp` region.
-    - Inside the `comp` region, you should create regions to indicate how much data you are computing on (i.e., `comp_small` if you are sorting a few values like the splitters, `comp_large` if you are sorting values in the array).
-    - Notice that auxillary functions like data_init are not under here.
-  - `MPI_X` - You will also see MPI regions in the calltree if using the appropriate MPI profiling configuration (see **Builds/**). Examples shown below.
-
-All functions will be called from `main` and most will be grouped under either `comm` or `comp` regions, representing communication and computation, respectively. You should be timing as many significant functions in your code as possible. **Do not** time print statements or other insignificant operations that may skew the performance measurements.
-
-### **Nesting Code Regions Example** - all computation code regions should be nested in the "comp" parent code region as following:
-
-```
-CALI_MARK_BEGIN("comp");
-CALI_MARK_BEGIN("comp_small");
-sort_pivots(pivot_arr);
-CALI_MARK_END("comp_small");
-CALI_MARK_END("comp");
-
-# Other non-computation code
-...
-
-CALI_MARK_BEGIN("comp");
-CALI_MARK_BEGIN("comp_large");
-sort_values(arr);
-CALI_MARK_END("comp_large");
-CALI_MARK_END("comp");
-```
-
-### **Calltree Example**:
-
-```
-# MPI Mergesort
-4.695 main
-├─ 0.001 MPI_Comm_dup
-├─ 0.000 MPI_Finalize
-├─ 0.000 MPI_Finalized
-├─ 0.000 MPI_Init
-├─ 0.000 MPI_Initialized
-├─ 2.599 comm
-│  ├─ 2.572 MPI_Barrier
-│  └─ 0.027 comm_large
-│     ├─ 0.011 MPI_Gather
-│     └─ 0.016 MPI_Scatter
-├─ 0.910 comp
-│  └─ 0.909 comp_large
-├─ 0.201 data_init_runtime
-└─ 0.440 correctness_check
-```
+0.867 main
+├─ 0.000 data_init_runtime
+├─ 0.000 comp
+│ ├─ 0.000 comp_small_merge_sort
+│ └─ 0.000 comp_large_merge_arrays
+├─ 0.032 comm
+│ ├─ 0.063 comm_large_recv
+│ └─ 0.000 comm_large_send
+└─ 0.000 correctness_check
 
 ### 5. Collect Metadata
 
