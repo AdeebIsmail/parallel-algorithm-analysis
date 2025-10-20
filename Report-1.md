@@ -269,13 +269,13 @@ graphics. We will also include graphics that compare performance between algorit
 
 ### 4. Caliper instrumentation
 
-0.867 main
+0.870 main
 ├─ 0.000 data_init_runtime
 ├─ 0.000 comp
 │ ├─ 0.000 comp_small_merge_sort
 │ └─ 0.000 comp_large_merge_arrays
-├─ 0.032 comm
-│ ├─ 0.063 comm_large_recv
+├─ 0.022 comm
+│ ├─ 0.044 comm_large_recv
 │ └─ 0.000 comm_large_send
 └─ 0.000 correctness_check
 

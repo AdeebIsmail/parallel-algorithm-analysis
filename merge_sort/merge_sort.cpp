@@ -1,3 +1,4 @@
+#include <adiak.hpp>
 #include <caliper/cali-manager.h>
 #include <caliper/cali.h>
 #include <math.h>
@@ -159,10 +160,10 @@ int main(int argc, char **argv) {
   int local_n = n / size;
   int *local_data = data;
 
-  for (int i = 0; i < local_n; i++) {
-    cout << local_data[i] << " ";
-  }
-  cout << "" << endl;
+  // for (int i = 0; i < local_n; i++) {
+  //   cout << local_data[i] << " ";
+  // }
+  // cout << "" << endl;
 
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_small_merge_sort");
@@ -213,11 +214,11 @@ int main(int argc, char **argv) {
     step *= 2;
   }
 
-  if (rank == 0) {
-    for (int i = 0; i < local_n; i++) {
-      cout << local_data[i] << " ";
-    }
-  }
+  // if (rank == 0) {
+  //   for (int i = 0; i < local_n; i++) {
+  //     cout << local_data[i] << " ";
+  //   }
+  // }
 
   delete[] local_data;
 
