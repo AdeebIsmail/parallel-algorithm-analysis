@@ -269,6 +269,20 @@ graphics. We will also include graphics that compare performance between algorit
 
 ### 4. Caliper instrumentation
 
+#### Bitonic Sort
+
+```
+0.661 main
+├─ 0.001 comm
+│  └─ 0.001 comm_large
+├─ 0.096 comp
+│  └─ 0.096 comp_large
+│     ├─ 0.006 merge_keep_high_n
+│     └─ 0.005 merge_keep_low_n
+├─ 0.004 correctness_check
+└─ 0.063 data_init_runtime
+```
+
 #### Radix Sort
 
 ```
