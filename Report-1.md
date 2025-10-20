@@ -283,16 +283,31 @@ graphics. We will also include graphics that compare performance between algorit
 └─ 0.000 correctness_check
 ```
 
+#### Merge Sort
+
+```
+0.867 main
+├─ 0.000 data_init_runtime
+├─ 0.000 comp
+│  ├─ 0.000 comp_small_merge_sort
+│  └─ 0.000 comp_large_merge_arrays
+├─ 0.032 comm
+│  ├─ 0.063 comm_large_recv
+│  └─ 0.000 comm_large_send
+└─ 0.000 correctness_check
+
+
 ### 5. Collect Metadata
 
 Have the following code in your programs to collect metadata:
 
 ```
+
 adiak::init(NULL);
-adiak::launchdate();    // launch date of the job
-adiak::libraries();     // Libraries used
-adiak::cmdline();       // Command line used to launch the job
-adiak::clustername();   // Name of the cluster
+adiak::launchdate(); // launch date of the job
+adiak::libraries(); // Libraries used
+adiak::cmdline(); // Command line used to launch the job
+adiak::clustername(); // Name of the cluster
 adiak::value("algorithm", algorithm); // The name of the algorithm you are using (e.g., "merge", "bitonic")
 adiak::value("programming_model", programming_model); // e.g. "mpi"
 adiak::value("data_type", data_type); // The datatype of input elements (e.g., double, int, float)
@@ -303,6 +318,7 @@ adiak::value("num_procs", num_procs); // The number of processors (MPI ranks)
 adiak::value("scalability", scalability); // The scalability of your algorithm. choices: ("strong", "weak")
 adiak::value("group_num", group_number); // The number of your group (integer, e.g., 1, 10)
 adiak::value("implementation_source", implementation_source); // Where you got the source code of your algorithm. choices: ("online", "ai", "handwritten").
+
 ```
 
 They will show up in the `Thicket.metadata` if the caliper file is read into Thicket.
@@ -371,3 +387,4 @@ Submit a zip named `TeamX.zip` where `X` is your team number. The zip should con
 - Data: All `.cali` files used to generate the plots seperated by algorithm/implementation.
 - Jupyter notebook: The Jupyter notebook(s) used to generate the plots for the report.
 - Report.md
+```
