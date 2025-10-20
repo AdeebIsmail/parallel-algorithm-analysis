@@ -310,6 +310,17 @@ graphics. We will also include graphics that compare performance between algorit
 │  └─ 0.000 comm_large_send
 └─ 0.000 correctness_check
 
+#### Sample Sort
+
+0.031 main
+├─ 0.029 comm
+│  ├─ 0.000 comm_large
+│  └─ 0.029 comm_small
+├─ 0.000 comp
+│  ├─ 0.000 comp_large
+│  └─ 0.000 comp_small
+├─ 0.000 correctness_check
+└─ 0.000 data_init_runtime
 
 ### 5. Collect Metadata
 
