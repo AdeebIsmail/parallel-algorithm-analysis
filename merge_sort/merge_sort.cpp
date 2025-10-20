@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
 
   if (sort_level == RANDOM) {
     for (int i = 0; i < elements_per_proc; i++) {
-      data[i] = rand() % 1000;
+      data[i] = rand() % (100 + rank * 2);
     }
   } else if (sort_level == SORTED) {
     int global_start = rank * elements_per_proc;
@@ -159,6 +159,11 @@ int main(int argc, char **argv) {
   int local_n = n / size;
   int *local_data = data;
 
+  for (int i = 0; i < local_n; i++) {
+    cout << local_data[i] << " ";
+  }
+  cout << "" << endl;
+
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_small_merge_sort");
   MergeSort(local_data, local_n);
@@ -184,6 +189,12 @@ int main(int argc, char **argv) {
       int *merged = merge_arrays(local_data, local_n, recv_data, recv_n);
       CALI_MARK_END("comp_large_merge_arrays");
       CALI_MARK_END("comp");
+      CALI_MARK_BEGIN("correctness_check");
+      if (validate(merged, local_n + recv_n) == -1) {
+        cout << "Validation Failed" << endl;
+        break;
+      }
+      CALI_MARK_END("correctness_check");
       delete[] local_data;
       delete[] recv_data;
       local_data = merged;
@@ -202,15 +213,13 @@ int main(int argc, char **argv) {
     step *= 2;
   }
 
-  // if (rank == 0) {
-  //   CALI_MARK_BEGIN("correctness_check");
-  //   cout << validate(local_data, n) << endl;
-  //   CALI_MARK_END("correctness_check");
-  // }
+  if (rank == 0) {
+    for (int i = 0; i < local_n; i++) {
+      cout << local_data[i] << " ";
+    }
+  }
 
   delete[] local_data;
-  // if (rank == 0)
-  //   delete[] data;
 
   MPI_Finalize();
   return 0;
