@@ -4,7 +4,7 @@ find_package(MPI REQUIRED)
 find_package(caliper REQUIRED)
 find_package(adiak REQUIRED)
 
-add_executable(mpi_mm mpi_mm.cpp)
+add_executable(sample_sort_mpi sample-sort.cpp)
 
 message(STATUS "MPI includes : ${MPI_INCLUDE_PATH}")
 message(STATUS "Caliper includes : ${caliper_INCLUDE_DIR}")
@@ -13,5 +13,5 @@ include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 include_directories(${caliper_INCLUDE_DIR})
 include_directories(${adiak_INCLUDE_DIRS})
 
-target_link_libraries(mpi_mm PRIVATE MPI::MPI_CXX)
-target_link_libraries(mpi_mm PRIVATE caliper)
+target_link_libraries(sample_sort_mpi PRIVATE MPI::MPI_CXX)
+target_link_libraries(sample_sort_mpi PRIVATE caliper)
