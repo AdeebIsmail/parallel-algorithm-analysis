@@ -1,0 +1,5 @@
+salloc --nodes=1 --ntasks=1 --cpus-per-task=4 --mem=8G --time=02:00:00 --partition=short
+ssh [node_id]
+. build.s
+scancel [job_id]
+sbatch mpi.grace_job parameters
