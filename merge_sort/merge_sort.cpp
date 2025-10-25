@@ -1,14 +1,17 @@
 #include <adiak.hpp>
+#include <algorithm>
 #include <caliper/cali-manager.h>
 #include <caliper/cali.h>
+#include <cassert>
 #include <math.h>
 #include <mpi.h>
+#include <random>
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
 
 enum SortLevel { SORTED, PERTURBED, RANDOM, REVERSED };
-
+#define GLOBAL_MAX_NUMBER 400e6
 // generate data in each process
 // do comparison check after each merge sort,
 int *merge_arrays(int *A, int nA, int *B, int nB) {
@@ -112,18 +115,25 @@ int main(int argc, char **argv) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+  cali::ConfigManager mgr;
+  mgr.start();
+
   int n;
   int *data = nullptr;
   n = 1 << element;
   int elements_per_proc = n / size;
-  srand(101);
 
   CALI_MARK_BEGIN("data_init_runtime");
   data = new int[elements_per_proc];
 
+  unsigned int seed = 12345 + rank * 1000;
+  std::mt19937 gen(seed);
+  std::uniform_int_distribution<> random_numbers(0, GLOBAL_MAX_NUMBER);
+  std::uniform_int_distribution<> indexes(0, elements_per_proc - 1);
+
   if (sort_level == RANDOM) {
     for (int i = 0; i < elements_per_proc; i++) {
-      data[i] = rand() % (100 + rank * 2);
+      data[i] = random_numbers(gen);
     }
   } else if (sort_level == SORTED) {
     int global_start = rank * elements_per_proc;
@@ -148,10 +158,12 @@ int main(int argc, char **argv) {
     }
     int num_swaps = elements_per_proc / 100;
     for (int s = 0; s < num_swaps; s++) {
-      int idx = rand() % (elements_per_proc - 1);
-      int temp = data[idx];
-      data[idx] = data[idx + 1];
-      data[idx + 1] = temp;
+      int idx1 = indexes(gen);
+      int idx2 = indexes(gen);
+      while (idx1 == idx2 && elements_per_proc > 1) {
+        idx2 = indexes(gen);
+      }
+      std::swap(data[idx1], data[idx2]);
     }
   }
 
@@ -160,10 +172,10 @@ int main(int argc, char **argv) {
   int local_n = n / size;
   int *local_data = data;
 
-  // for (int i = 0; i < local_n; i++) {
-  //   cout << local_data[i] << " ";
-  // }
-  // cout << "" << endl;
+  for (int i = 0; i < local_n; i++) {
+    cout << local_data[i] << " ";
+  }
+  cout << "" << endl;
 
   CALI_MARK_BEGIN("comp");
   CALI_MARK_BEGIN("comp_small_merge_sort");
@@ -193,6 +205,7 @@ int main(int argc, char **argv) {
       CALI_MARK_BEGIN("correctness_check");
       if (validate(merged, local_n + recv_n) == -1) {
         cout << "Validation Failed" << endl;
+        assert(false);
         break;
       }
       CALI_MARK_END("correctness_check");
@@ -213,12 +226,12 @@ int main(int argc, char **argv) {
     }
     step *= 2;
   }
-
-  // if (rank == 0) {
-  //   for (int i = 0; i < local_n; i++) {
-  //     cout << local_data[i] << " ";
-  //   }
-  // }
+  cout << "ENding" << endl;
+  if (rank == 0) {
+    for (int i = 0; i < local_n; i++) {
+      cout << local_data[i] << " ";
+    }
+  }
 
   delete[] local_data;
 
@@ -254,6 +267,9 @@ int main(int argc, char **argv) {
                "cme323_lec3.pdf"); // Where you got the source code of
                                    // your algorithm. choices:
                                    // ("online", "ai", "handwritten").
+
+  mgr.stop();
+  mgr.flush();
 
   return 0;
 }
