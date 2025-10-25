@@ -1,6 +1,6 @@
 #include <adiak.hpp>
+#include <algorithm>
 #include <bits/getopt_core.h>
-#include <cctype>
 #include <climits>
 #include <cstddef>
 #include <cstdlib>
@@ -8,7 +8,6 @@
 #include <iostream>
 #include <mpi.h>
 #include <string>
-#include <typeinfo>
 #include <vector>
 
 #include <caliper/cali-manager.h>
@@ -224,7 +223,8 @@ int main(int argc, char *argv[]) {
     switch (cfg.input_type) {
     case RANDOM:
       for (int i = 0; i < local_size; i++) {
-        int_local_data[i] = rand() % 100000;
+        int_local_data[i] =
+            rand() % 400000000; // Random Number range: [0,400 Million]
       }
       break;
     case SORTED:
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
         int_local_data[i] = static_cast<int>(global_offset + i);
       }
 
-      const int num_swaps = max(1, floor(0.01 * local_size));
+      const int num_swaps = std::max<int>(1, floor(0.01 * local_size));
       for (int i = 0; i < num_swaps; i++) {
         int idx = (rand() % local_size) - 1;
         int temp = int_local_data[i];
@@ -259,7 +259,8 @@ int main(int argc, char *argv[]) {
     switch (cfg.input_type) {
     case RANDOM:
       for (int i = 0; i < local_size; i++) {
-        double_local_data[i] = rand() % 100000;
+        double_local_data[i] =
+            rand() % 400000000; // Random Number range: [0,400 Million]
       }
       break;
     case SORTED:
@@ -278,7 +279,7 @@ int main(int argc, char *argv[]) {
         double_local_data[i] = static_cast<double>(global_offset + i);
       }
 
-      const int num_swaps = max(1, floor(0.01 * local_size));
+      const int num_swaps = std::max<int>(1, floor(0.01 * local_size));
       for (int i = 0; i < num_swaps; i++) {
         int idx = (rand() % local_size) - 1;
         double temp = int_local_data[i];
@@ -328,18 +329,24 @@ int main(int argc, char *argv[]) {
     }
 
     // 5) Partition LOCAL into P buckets by splitters
-    int *buckets = new int[procs];
+    int **buckets = new int *[procs];
+    int *bucket_sizes = new int[procs];
+    for (int i = 0; i < procs; i++) {
+      bucket_sizes[i] = 0;
+    }
     for (int bucket_num = 0; bucket_num < procs; bucket_num++) {
       int lower = (bucket_num == 0) ? INT_MIN : splitters[bucket_num - 1];
       int upper = (bucket_num == procs - 1) ? INT_MAX : splitters[bucket_num];
     }
 
-    // 6) All-to-all exchange of counts (small)
-
     delete[] int_samples;
     delete[] all_samples;
     delete[] splitters;
+    for (int i = 0; i < procs; i++) {
+      delete[] buckets[i];
+    }
     delete[] buckets;
+    delete[] bucket_sizes;
     break;
   }
   case DOUBLE:
@@ -371,8 +378,10 @@ int main(int argc, char *argv[]) {
 
 void merge_runs(const void *local_array, const void *tmp,
                 const DATA_TYPE d_type, size_t left, size_t mid, size_t right) {
-  int *int_local_array, int_tmp = nullptr;
-  double *double_local_data, double_tmp = nullptr;
+  int *int_local_array = nullptr;
+  int *int_tmp = nullptr;
+  double *double_local_data = nullptr;
+  double *double_tmp = nullptr;
 
   size_t i = left, j = mid, k = left;
   switch (d_type) {
@@ -394,15 +403,15 @@ void merge_runs(const void *local_array, const void *tmp,
     double_local_data = (double *)local_array;
     double_tmp = (double *)tmp;
     while (i < mid && j < right)
-      double_tmp[k++] = (double_local_array[i] <= double_local_array[j])
-                            ? double_local_array[i++]
-                            : double_local_array[j++];
+      double_tmp[k++] = (double_local_data[i] <= double_local_data[j])
+                            ? double_local_data[i++]
+                            : double_local_data[j++];
     while (i < mid)
-      double_tmp[k++] = double_local_array[i++];
+      double_tmp[k++] = double_local_data[i++];
     while (j < right)
-      double_tmp[k++] = double_local_array[j++];
+      double_tmp[k++] = double_local_data[j++];
     for (size_t t = left; t < right; ++t)
-      double_local_array[t] = double_tmp[t];
+      double_local_data[t] = double_tmp[t];
     break;
   }
 }
@@ -417,10 +426,10 @@ void local_sort_mergesort(const void *local_array, const long long local_size,
     int_tmp = new int[local_size];
     for (size_t width = 1; width < local_size; width <<= 1) {
       for (size_t left = 0; left < local_size; left += (width << 1)) {
-        size_t mid = std::min(left + width, local_size);
-        size_t right = std::min(left + (width << 1), local_size);
+        size_t mid = std::min<size_t>(left + width, local_size);
+        size_t right = std::min<size_t>(left + (width << 1), local_size);
         if (mid < right)
-          merge_runs(local_array, int_tmp, d_type, tmp, left, mid, right);
+          merge_runs(local_array, int_tmp, d_type, left, mid, right);
       }
     }
     delete[] int_tmp;
@@ -429,10 +438,10 @@ void local_sort_mergesort(const void *local_array, const long long local_size,
     double_tmp = new double[local_size];
     for (size_t width = 1; width < local_size; width <<= 1) {
       for (size_t left = 0; left < local_size; left += (width << 1)) {
-        size_t mid = std::min(left + width, local_size);
-        size_t right = std::min(left + (width << 1), local_size);
+        size_t mid = std::min<size_t>(left + width, local_size);
+        size_t right = std::min<size_t>(left + (width << 1), local_size);
         if (mid < right)
-          merge_runs(local_array, double_tmp, d_type, tmp, left, mid, right);
+          merge_runs(local_array, double_tmp, d_type, left, mid, right);
       }
     }
     delete[] double_tmp;
