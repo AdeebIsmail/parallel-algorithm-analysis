@@ -37,11 +37,11 @@ __rec=node,id=92,attr=10,data=2113,parent=91
 __rec=node,id=93,attr=8,data=sum#scale#sum#time.duration.ns,parent=92
 __rec=node,id=15,attr=8,data=spot.channel,parent=12
 __rec=node,id=103,attr=15,data=regionprofile
-__rec=ctx,ref=103,attr=58=61=96=63=64=67=70=85=88=99=89=90=93,data=0.000293758=0.000531445=0.000324667=0.332459=1024=0.332459=0=0.000293758=0.000531445=0.000324667=0.332459=1024=0.332459
+__rec=ctx,ref=103,attr=58=61=96=63=64=67=70=85=88=99=89=90=93,data=0.000278578=0.0004729=0.000319585=0.327255=1024=0.327255=0=0.000278578=0.0004729=0.000319585=0.327255=1024=0.327255
 __rec=node,id=34,attr=10,data=276,parent=3
 __rec=node,id=35,attr=8,data=region,parent=34
 __rec=node,id=36,attr=35,data=main
-__rec=ctx,ref=36=103,attr=58=61=96=63=64=67=70=85=88=99=89=90=93,data=0.93884=1.3229=1.02768=1052.35=1024=1052.35=1=0.93783=1.07516=1.02405=1048.63=1024=1048.63
+__rec=ctx,ref=36=103,attr=58=61=96=63=64=67=70=85=88=99=89=90=93,data=1.14083=1.59094=1.26496=1295.31=1024=1295.31=1=1.13988=1.44628=1.25838=1288.58=1024=1288.58
 __rec=node,id=40,attr=35,data=data_init_runtime,parent=36
 __rec=node,id=71,attr=14,data=count,parent=2
 __rec=node,id=72,attr=13,data=Calls/rank (min),parent=71
@@ -58,19 +58,19 @@ __rec=node,id=79,attr=8,data=max#sum#rc.count,parent=78
 __rec=node,id=80,attr=13,data=Calls (total),parent=71
 __rec=node,id=81,attr=10,data=2113,parent=80
 __rec=node,id=82,attr=8,data=sum#sum#rc.count,parent=81
-__rec=ctx,ref=40=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=7.2769e-05=0.000154498=8.04493e-05=0.0823801=1024=0.0823801=2=1=1=1024=1024=1=1024=7.2769e-05=0.000154498=8.04493e-05=0.0823801=1024=0.0823801
+__rec=ctx,ref=40=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=7.3848e-05=0.000132038=8.00965e-05=0.0820188=1024=0.0820188=2=1=1=1024=1024=1=1024=7.3848e-05=0.000132038=8.00965e-05=0.0820188=1024=0.0820188
 __rec=node,id=48,attr=35,data=comp,parent=36
-__rec=ctx,ref=48=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.00076236=0.114344=0.00141444=1.44839=1024=1.44839=3=1=1=2047=1024=11=2047=1.1821e-05=0.000126652=1.96883e-05=0.0201608=1024=0.0201608
+__rec=ctx,ref=48=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.000745183=0.114494=0.00141838=1.45242=1024=1.45242=3=1=1=2047=1024=11=2047=1.173e-05=9.4099e-05=1.9494e-05=0.0199618=1024=0.0199618
 __rec=node,id=49,attr=35,data=comp_small,parent=48
-__rec=ctx,ref=49=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.00074932=0.0015475=0.000787395=0.806293=1024=0.806293=4=1=1=1024=1024=1=1024=0.00074932=0.0015475=0.000787395=0.806293=1024=0.806293
+__rec=ctx,ref=49=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.00073182=0.00115635=0.000786377=0.80525=1024=0.80525=4=1=1=1024=1024=1=1024=0.00073182=0.00115635=0.000786377=0.80525=1024=0.80525
 __rec=node,id=50,attr=35,data=comm,parent=36
-__rec=ctx,ref=50=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=6.8826e-05=0.0482623=0.00171421=1.75535=1024=1.75535=5=1=1=2046=1024=10=2046=5.662e-06=8.7091e-05=1.41999e-05=0.0145407=1024=0.0145407
+__rec=ctx,ref=50=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=6.8313e-05=0.099124=0.00465382=4.76551=1024=4.76551=5=1=1=2046=1024=10=2046=5.661e-06=8.8752e-05=1.43097e-05=0.0146531=1024=0.0146531
 __rec=node,id=51,attr=35,data=comm_large,parent=50
-__rec=ctx,ref=51=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=6.307e-05=0.0481806=0.00170001=1.74081=1024=1.74081=6=1=1=2046=1024=10=2046=6.307e-05=0.0481806=0.00170001=1.74081=1024=1.74081
+__rec=ctx,ref=51=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=6.2344e-05=0.0990353=0.00463951=4.75086=1024=4.75086=6=1=1=2046=1024=10=2046=6.2344e-05=0.0990353=0.00463951=4.75086=1024=4.75086
 __rec=node,id=52,attr=35,data=comp_large,parent=48
-__rec=ctx,ref=52=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.000119513=0.113424=0.00121471=0.621932=512=0.621932=7=1=1=1023=512=10=1023=0.000119513=0.113424=0.00121471=0.621932=512=0.621932
+__rec=ctx,ref=52=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=0.000124965=0.113619=0.00122502=0.627209=512=0.627209=7=1=1=1023=512=10=1023=0.000124965=0.113619=0.00122502=0.627209=512=0.627209
 __rec=node,id=53,attr=35,data=correctness_check,parent=36
-__rec=ctx,ref=53=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=7.4312e-05=0.119634=0.00084638=0.433347=512=0.433347=8=1=2=1024=512=11=1024=7.4312e-05=0.119634=0.00084638=0.433347=512=0.433347
+__rec=ctx,ref=53=103,attr=58=61=96=63=64=67=70=74=102=75=76=79=82=85=88=99=89=90=93,data=7.417e-05=0.11953=0.000852284=0.436369=512=0.436369=8=1=2=1024=512=11=1024=7.417e-05=0.11953=0.000852284=0.436369=512=0.436369
 __rec=node,id=171,attr=10,data=512,parent=3
 __rec=node,id=177,attr=8,data=spot.channels,parent=171
 __rec=node,id=176,attr=8,data=spot.options,parent=171
@@ -155,5 +155,5 @@ __rec=node,id=166,attr=131,data=Merge Sort,parent=165
 __rec=node,id=167,attr=128,data=c,parent=166
 __rec=node,id=168,attr=123,data=[./merge_sort\,24\,3\,0],parent=167
 __rec=node,id=169,attr=118,data=[linux-vdso.so.1\,/scratch/group/csce-435-f25/Caliper/caliper/lib64/libcaliper.so.2\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/lib/libmpicxx.so.12\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/lib/release/libmpi.so.12\,/lib64/librt.so.1\,/lib64/libpthread.so.0\,/lib64/libdl.so.2\,/sw/eb/sw/GCCcore/12.2.0/lib64/libstdc++.so.6\,/lib64/libm.so.6\,/sw/eb/sw/GCCcore/12.2.0/lib64/libgcc_s.so.1\,/lib64/libc.so.6\,/sw/eb/sw/CUDA/11.8.0/extras/CUPTI/lib64/libcupti.so.11.8\,/sw/eb/sw/PAPI/7.0.1-GCCcore-12.2.0/lib/libpapi.so.7.0\,/lib64/ld-linux-x86-64.so.2\,/lib64/libutil.so.1\,/sw/eb/sw/PAPI/7.0.1-GCCcore-12.2.0/lib/libpfm.so.4\,/lib64/libnuma.so.1\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/libfabric.so.1\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libverbs-1.12-fi.so\,/lib64/librdmacm.so.1\,/lib64/libibverbs.so.1\,/lib64/libnl-3.so.200\,/lib64/libnl-route-3.so.200\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libverbs-1.1-fi.so\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libtcp-fi.so\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libsockets-fi.so\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libshm-fi.so\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/librxm-fi.so\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libpsm3-fi.so\,/lib64/libuuid.so.1\,/sw/eb/sw/impi/2021.6.0-intel-compilers-2022.1.0/mpi/2021.6.0/libfabric/lib/prov/libmlx-fi.so\,/lib64/libucp.so.0\,/sw/eb/sw/zlib/1.2.12-GCCcore-12.2.0/lib/libz.so.1\,/usr/lib64/libuct.so.0\,/usr/lib64/libucs.so.0\,/usr/lib64/libucm.so.0\,/usr/lib64/libibverbs/libmlx5-rdmav34.so\,/usr/lib64/ucx/libuct_ib.so.0\,/usr/lib64/ucx/libuct_rdmacm.so.0\,/usr/lib64/ucx/libuct_cma.so.0\,/usr/lib64/ucx/libuct_knem.so.0\,/usr/lib64/ucx/libuct_xpmem.so.0\,/usr/lib64/libxpmem.so.0],parent=168
-__rec=node,id=170,attr=113,data=1761629648,parent=169
+__rec=node,id=170,attr=113,data=1761673285,parent=169
 __rec=globals,ref=182=170
