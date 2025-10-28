@@ -1,0 +1,208 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+slurmstepd: error: *** JOB 16888442 ON c137 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.8 ON c138 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.5 ON c143 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.11 ON c778 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.13 ON c788 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.12 ON c157 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.9 ON c140 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.15 ON c795 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.4 ON c799 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.3 ON c155 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.10 ON c149 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.1 ON c797 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.16 ON c793 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.6 ON c785 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16888442.0 ON c137 CANCELLED AT 2025-10-27T13:30:55 DUE TO TIME LIMIT ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 128 PID 3799042 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 129 PID 3799043 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 130 PID 3799044 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 131 PID 3799045 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 132 PID 3799046 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 133 PID 3799047 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 134 PID 3799048 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 135 PID 3799049 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 136 PID 3799050 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 137 PID 3799051 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 138 PID 3799052 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 139 PID 3799053 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 140 PID 3799054 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+[proxy:0:4@c142] i_proxy_kill_processes (../../../../../src/pm/i_hydra/proxy/intel/i_proxy.c:491): error sending signal 15 to process 3799055
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 141 PID 3799055 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 142 PID 3799056 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 143 PID 3799057 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 144 PID 3799058 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 145 PID 3799059 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 146 PID 3799060 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 147 PID 3799061 RUNNING AT c142
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 192 PID 3312571 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 193 PID 3312572 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 194 PID 3312573 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 195 PID 3312574 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 196 PID 3312575 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 197 PID 3312576 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 198 PID 3312577 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 199 PID 3312578 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 512 PID 3198700 RUNNING AT c313
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 200 PID 3312579 RUNNING AT c148
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================

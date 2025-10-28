@@ -1,0 +1,23 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+[bstrap:0:-1@c031] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c032 (pid 2759666, exit code 49152)
+[bstrap:0:-1@c031] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c031] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c031] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:1061): error waiting for event
+[bstrap:0:-1@c031] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:356): error setting up the bstrap proxies
+[bstrap:0:-1@c031] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c031] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:628): error sending proxy ID upstream
+srun: error: c031: task 7: Exited with exit code 5
+slurmstepd: error: *** STEP 16887304.9 ON c028 CANCELLED AT 2025-10-27T10:21:46 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16887304.4 ON c022 CANCELLED AT 2025-10-27T10:21:46 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 16887304.5 ON c065 CANCELLED AT 2025-10-27T10:21:46 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 16887304 ON c002 CANCELLED AT 2025-10-27T10:21:46 DUE TO TIME LIMIT ***
+[mpiexec@c002] HYD_sock_write (../../../../../src/pm/i_hydra/libhydra/sock/hydra_sock_intel.c:362): write error (Bad file descriptor)

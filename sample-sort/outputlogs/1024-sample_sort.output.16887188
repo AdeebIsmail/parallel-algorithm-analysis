@@ -1,0 +1,399 @@
+
+Inactive Modules:
+  1) UCX/1.12.1     2) numactl/2.0.14
+
+Due to MODULEPATH changes, the following have been reloaded:
+  1) binutils/2.38     2) zlib/1.2.12
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.3.0 => GCCcore/12.2.0
+
+[bstrap:0:-1@c297] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c298 (pid 87073, exit code 49152)
+[bstrap:0:-1@c297] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c297] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c297] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:1061): error waiting for event
+[bstrap:0:-1@c297] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:356): error setting up the bstrap proxies
+[bstrap:0:-1@c297] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c297] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:628): error sending proxy ID upstream
+[bstrap:0:-1@c250] check_exit_codes (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:117): unable to run bstrap_proxy on c281 (pid 1013428, exit code 49152)
+[bstrap:0:-1@c250] poll_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:159): check exit codes error
+[bstrap:0:-1@c250] HYD_dmx_poll_wait_for_proxy_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:212): poll for event error
+[bstrap:0:-1@c250] HYD_bstrap_setup (../../../../../src/pm/i_hydra/libhydra/bstrap/src/intel/i_hydra_bstrap.c:1061): error waiting for event
+[bstrap:0:-1@c250] upstream_cb (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:356): error setting up the bstrap proxies
+[bstrap:0:-1@c250] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:80): callback returned error status
+[bstrap:0:-1@c250] main (../../../../../src/pm/i_hydra/libhydra/bstrap/src/hydra_bstrap_proxy.c:628): error sending proxy ID upstream
+srun: error: c297: task 7: Exited with exit code 5
+srun: error: c250: task 2: Exited with exit code 5
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 16887188.0 ON c245 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** STEP 16887188.2 ON c285 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** STEP 16887188.14 ON c300 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** STEP 16887188.7 ON c302 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** JOB 16887188 ON c245 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** STEP 16887188.13 ON c246 CANCELLED AT 2025-10-27T10:00:39 ***
+slurmstepd: error: *** STEP 16887188.8 ON c309 CANCELLED AT 2025-10-27T10:00:39 ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 512 PID 335597 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 513 PID 335598 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 514 PID 335599 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+slurmstepd: error: *** STEP 16887188.5 ON c304 CANCELLED AT 2025-10-27T10:00:39 ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 515 PID 335600 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 516 PID 335601 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 517 PID 335602 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 518 PID 335603 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+slurmstepd: error: *** STEP 16887188.3 ON c306 CANCELLED AT 2025-10-27T10:00:39 ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 519 PID 335604 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+slurmstepd: error: *** STEP 16887188.6 ON c283 CANCELLED AT 2025-10-27T10:00:39 ***
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 520 PID 335605 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+slurmstepd: error: *** STEP 16887188.11 ON c292 CANCELLED AT 2025-10-27T10:00:39 ***
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 521 PID 335606 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 522 PID 335607 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 523 PID 335608 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 524 PID 335609 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 525 PID 335610 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 526 PID 335611 RUNNING AT c299
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 256 PID 3384238 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 257 PID 3384239 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+slurmstepd: error: *** STEP 16887188.16 ON c794 CANCELLED AT 2025-10-27T10:00:39 ***
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 258 PID 3384240 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 576 PID 3858443 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 577 PID 3858444 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 64 PID 2902335 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 259 PID 3384241 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 260 PID 3384242 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 261 PID 3384243 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 65 PID 2902336 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 66 PID 2902337 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 262 PID 3384244 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 263 PID 3384245 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 264 PID 3384246 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 265 PID 3384247 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 578 PID 3858445 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 1845772 RUNNING AT c245
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 266 PID 3384248 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 579 PID 3858446 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 580 PID 3858447 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 1 PID 1845773 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 581 PID 3858448 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 582 PID 3858449 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 2 PID 1845774 RUNNING AT c245
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 267 PID 3384249 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 67 PID 2902338 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 583 PID 3858450 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 3 PID 1845775 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 68 PID 2902339 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 268 PID 3384250 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 4 PID 1845776 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 269 PID 3384251 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+=   RANK 584 PID 3858451 RUNNING AT c301
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 5 PID 1845777 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 69 PID 2902340 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 270 PID 3384252 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 271 PID 3384253 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 640 PID 3180100 RUNNING AT c303
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 6 PID 1845778 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 70 PID 2902341 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 7 PID 1845779 RUNNING AT c245
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
+
+===================================================================================
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 71 PID 2902342 RUNNING AT c247
+=   KILLED BY SIGNAL: 15 (Terminated)
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 272 PID 3384254 RUNNING AT c284
+=   KILLED BY SIGNAL: 15 (Terminated)
+===================================================================================
