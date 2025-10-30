@@ -8,6 +8,6 @@ Due to MODULEPATH changes, the following have been reloaded:
 The following have been reloaded with a version change:
   1) GCCcore/11.3.0 => GCCcore/12.2.0
 
-Global sorted check: FAILED
+Global sorted check: PASSED
 JOBID        NAME                 USER                     PARTITION              NODES  CPUS  STATE        TIME         TIME_LEFT    START_TIME        REASON                   NODELIST
 16886466     256-sample_sort      computerguy21            short                  8      256   RUNNING      0:17         4:43         2025-10-27T02:33  None                     c[250,260,281-286]
