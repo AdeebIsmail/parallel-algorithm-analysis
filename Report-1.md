@@ -406,6 +406,23 @@ Plots for the presentation should be as follows:
 
 Analyze these plots and choose a subset to present and explain in your presentation.
 
+### Radix Sort
+
+#### Strong Scaling Plots
+  <img src="radix_sort/plots/strong-time/comm-268435456-strong.png" width="500" height="400"> 
+  <img src="radix_sort/plots/strong-time/comp_large-268435456-strong.png" width="500" height="400">
+  <img src="radix_sort/plots/strong-time/main-268435456-strong.png" width="500" height="400">
+
+#### Strong Scaling Speedup Plots
+  <img src="radix_sort/plots/strong-speedup/comm-Random-speedup.png" width="500" height="400"> 
+  <img src="radix_sort/plots/strong-speedup/comp_large-Random-speedup.png" width="500" height="400">
+  <img src="radix_sort/plots/strong-speedup/main-Random-speedup.png" width="500" height="400">
+
+#### Weak Scaling Plots
+  <img src="radix_sort/plots/weak/comm-Random-weak.png" width="500" height="400"> 
+  <img src="radix_sort/plots/weak/comp_large-Random-weak.png" width="500" height="400">
+  <img src="radix_sort/plots/weak/main-Random-weak.png" width="500" height="400">
+
 ## 8. Final Report
 
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
