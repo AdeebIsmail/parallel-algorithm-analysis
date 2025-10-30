@@ -359,7 +359,27 @@ Plots for the presentation should be as follows:
 
 Analyze these plots and choose a subset to present and explain in your presentation.
 
-# Analysis
+### Merge Sort
+
+#### Strong Scaling Plots
+
+<img src="merge_sort/strong-scaling/strong_scaling_comm_input_size_268435456.png" width="500" height="400"> 
+<img src="merge_sort/strong-scaling/strong_scaling_comp_large_input_size_268435456.png" width="500" height="400"> 
+<img src="merge_sort/strong-scaling/strong_scaling_main_input_size_268435456.png" width="500" height="400">
+
+#### Strong Scaling Speedup Plots
+
+<img src="merge_sort/strong-scaling-speedup/strong_scaling_speedup_comm_input_type_Random.png" width="500" height="400"> 
+<img src="merge_sort/strong-scaling-speedup/strong_scaling_speedup_comp_large_input_type_Random.png" width="500" height="400"> 
+<img src="merge_sort/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400">
+
+#### Weak Scaling Plots
+
+<img src="merge_sort/weak-scaling/weak_scaling_comm_input_type_Random.png" width="500" height="400">
+<img src="merge_sort/weak-scaling/weak_scaling_comp_large_input_type_Random.png" width="500" height="400">
+<img src="merge_sort/weak-scaling/weak_scaling_main_input_type_Random.png" width="500" height="400">
+
+#### Analysis - Merge Sort
 
 Looking at the weak scaling for comp_large, follows an upward trend. This makes sense since as we increase the problem size, the amount of time we spend merging arrays will also increase. For communication, we can see that it increases and then drops down. This could be due to the fact as we increase the problem size and processor count, we spend less time communicating between processors. For strong scaling comp_large, we can see a decreasing trend which makes sense. As we increase the processor count, we spend less time merging arrays, since each processors has a smaller array size. For comm, we again see it increases and then drops down near the end. As we increase the processor count, we spend more time communicating. The reason for the dropoff could be because we have so many processors, each one has a small set of data which does not take long to send and recieve. For comm speedup strong scaling, there is a jump at the end for the different input types. We can see our communication is not scaling well unless it is at large input sizes. This makes sense with our other comm graphs since, as we can see before as comm was dropping for large processor count for strong scaling.
 
