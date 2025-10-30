@@ -426,6 +426,13 @@ Analyze these plots and choose a subset to present and explain in your presentat
   <img src="radix_sort/plots/weak/comp_large-Random-weak.png" width="500" height="400">
   <img src="radix_sort/plots/weak/main-Random-weak.png" width="500" height="400">
 
+#### Analysis Radix Sort
+
+The speedup factor doesn’t vary much between input type (sorted, perturbed, etc.) because radix sort doesn’t have an inbuilt mechanism to check the sorting level of the array. So, each input, even if it’s already sorted, is sorted radix by radix. The communication speedup curve generally decays because increasing the number of processes causes increased communication among the processes. This is especially true for my radix sort implementation since each process could possibly send elements to every other process. Interestingly, 2^9 and above processes seem to perform well in many plots, and even have communication speedup, suggesting that grace has a more optimal resource allocation strategy after some threshold. 
+The large computation speedup generally increases with increased process count before hitting a plateau and decreasing. Larger input sizes seem to have increased speedup compared to smaller input sizes as indicated by sharper curves. This increased speedup can be attributed to each process having to locally sort less elements since the input size is fixed. The strong scaling plot especially supports this as increasing the process count for fixed input sizes shows a decaying exponential trend. Since part of the large computation time involves computing histograms of every process, plateaus are unsurprising since computing histograms for more processes takes longer. 
+The total or main speedup behaves similarly to the large computation time as it increases before hitting a plateau and decreasing. Increasing process count only seems to benefit input sizes of 2^24 and above as the other input sizes seem to mainly have negative speedup (i.e. slowdown). While the large computation speedup is as large as ~120, the total speedup is much more modest (~4). This is because increased communication costs cancel out the benefits of quicker computation, leading to more modest efficiency gains. The weak scaling plots especially support this as the main time looks like a replica of the comm time on a different scale. The strong scaling plots also show this balance quite well as the first half of the main time closely resembles a decaying computation time while the second half resembles an increased communication time. In other words, the strong scaling plot looks like the comp_large plot superimposed on the comm_time plot.  
+
+
 ### Merge Sort
 
 #### Strong Scaling Plots
