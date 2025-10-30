@@ -314,7 +314,7 @@ Include figures and explanation of your analysis.
 
 For input_size's:
 
-- 2^16, 2^18, 2^20, 2^22, 2^24, 2^26, 2^28
+- 2^16, 2^18, 2^20, 2^22, 2^24,W 2^26, 2^28
 
 For input_type's:
 
@@ -358,6 +358,10 @@ Plots for the presentation should be as follows:
     - Weak scaling plots for each input_type (4 plots)
 
 Analyze these plots and choose a subset to present and explain in your presentation.
+
+# Analysis
+
+Looking at the weak scaling for comp_large, follows an upward trend. This makes sense since as we increase the problem size, the amount of time we spend merging arrays will also increase. For communication, we can see that it increases and then drops down. This could be due to the fact as we increase the problem size and processor count, we spend less time communicating between processors. For strong scaling comp_large, we can see a decreasing trend which makes sense. As we increase the processor count, we spend less time merging arrays, since each processors has a smaller array size. For comm, we again see it increases and then drops down near the end. As we increase the processor count, we spend more time communicating. The reason for the dropoff could be because we have so many processors, each one has a small set of data which does not take long to send and recieve. For comm speedup strong scaling, there is a jump at the end for the different input types. We can see our communication is not scaling well unless it is at large input sizes. This makes sense with our other comm graphs since, as we can see before as comm was dropping for large processor count for strong scaling.
 
 ## 8. Final Report
 
