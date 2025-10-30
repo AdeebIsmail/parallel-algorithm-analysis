@@ -1,12 +1,3 @@
-// bitonic_mpi.cpp  (per-rank generation + debug prints + fixed bitonic logic)
-// Build (Intel MPI example):
-//   mpiicpc -O3 bitonic_mpi.cpp -o bitonic_mpi -lcaliper -ladiak
-// or OpenMPI:
-//   mpicxx  -O3 bitonic_mpi.cpp -o bitonic_mpi -lcaliper -ladiak
-// (Make sure C++17 is enabled if you use CMake: set(CMAKE_CXX_STANDARD 17))
-// Run:
-//   mpirun -np 4 ./bitonic_mpi --n 1024 --input_type Random --verify
-
 #include <mpi.h>
 #include <vector>
 #include <algorithm>
@@ -15,10 +6,13 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <type_traits>
 
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
+
+using T = int; // change to double for the double build
 
 // --------------------- Simple CLI ---------------------
 struct Args {
@@ -44,32 +38,32 @@ static inline void rank_print_ordered(MPI_Comm comm, int r, int P, const std::st
     }
     MPI_Barrier(comm);
 }
-static inline std::pair<int,int> minmax_of(const std::vector<int>& v) {
+static inline std::pair<int,int> minmax_of(const std::vector<T>& v) {
     return { v.front(), v.back() }; // assumes non-empty and sorted
 }
 
-// --------------------- Per-rank local data generation (with prints) ---------------------
-void make_local_data(std::vector<int>& local, long long N, int r, int P, const Args& a) {
+// requires: #include <type_traits>
+void make_local_data(std::vector<T>& local, long long N, int r, int P, const Args& a) {
     CALI_CXX_MARK_SCOPE("data_init_runtime");
 
-    const long long n = (long long)local.size();
-    const long long start = (long long)r * n;  // global start index of this rank's slice
+    const long long n = static_cast<long long>(local.size());
+    const long long start = static_cast<long long>(r) * n;  // global start index of this rank's slice
 
     if (a.input_type == "Sorted") {
         for (long long i = 0; i < n; ++i)
-            local[(size_t)i] = (int)(start + i);
+            local[(size_t)i] = static_cast<T>(start + i);
 
     } else if (a.input_type == "ReverseSorted") {
         for (long long i = 0; i < n; ++i) {
             long long g = start + i;                 // global index
-            local[(size_t)i] = (int)(N - 1 - g);     // reverse of global index
+            local[(size_t)i] = static_cast<T>(N - 1 - g);
         }
 
     } else if (a.input_type == "1_perc_perturbed") {
         // Start from the globally-consistent "Sorted" slice, then perturb ~1% within this slice.
         for (long long i = 0; i < n; ++i)
-            local[(size_t)i] = (int)(start + i);
-        std::mt19937 rng(42u + (unsigned)r); // per-rank seed (reproducible)
+            local[(size_t)i] = static_cast<T>(start + i);
+        std::mt19937 rng(42u + static_cast<unsigned>(r)); // per-rank seed (reproducible)
         std::uniform_int_distribution<long long> pos(0, n - 1);
         const long long swaps = std::max(1LL, n/100);
         for (long long k = 0; k < swaps; ++k) {
@@ -78,10 +72,16 @@ void make_local_data(std::vector<int>& local, long long N, int r, int P, const A
         }
 
     } else { // Random
-        std::mt19937 rng(42u + (unsigned)r); // per-rank seed to avoid identical blocks
-        std::uniform_int_distribution<int> dist(0, 1000000000);
-        for (long long i = 0; i < n; ++i)
-            local[(size_t)i] = dist(rng);
+        std::mt19937 rng(42u + static_cast<unsigned>(r)); // per-rank seed to avoid identical blocks
+        if constexpr (std::is_same_v<T,int>) {
+            std::uniform_int_distribution<int> dist(0, 400000000);
+            for (long long i = 0; i < n; ++i)
+                local[(size_t)i] = dist(rng);
+        } else {
+            std::uniform_real_distribution<double> dist(0.0, 400000000.0);
+            for (long long i = 0; i < n; ++i)
+                local[(size_t)i] = static_cast<T>(dist(rng));
+        }
     }
 
     // ----- PRINT: what this rank generated -----
@@ -106,10 +106,13 @@ void make_local_data(std::vector<int>& local, long long N, int r, int P, const A
     }
 }
 
+
+
+
 // --------------------- Correctness check (with prints) ---------------------
 // (1) Each local block ascending
 // (2) Boundaries: max[r] <= min[r+1] for all r
-bool is_sorted_global(const std::vector<int>& local, MPI_Comm comm) {
+bool is_sorted_global(const std::vector<T>& local, MPI_Comm comm) {
     CALI_CXX_MARK_SCOPE("correctness_check");
 
     int P, r;
@@ -131,7 +134,7 @@ bool is_sorted_global(const std::vector<int>& local, MPI_Comm comm) {
     }
 
     // Gather mins/maxs to rank 0 for boundary prints
-    std::vector<int> mins, maxs;
+    std::vector<T> mins, maxs;
     if (r == 0) { mins.resize(P); maxs.resize(P); }
     MPI_Gather(&my_min, 1, MPI_INT, mins.data(), 1, MPI_INT, 0, comm);
     MPI_Gather(&my_max, 1, MPI_INT, maxs.data(), 1, MPI_INT, 0, comm);
@@ -158,9 +161,9 @@ bool is_sorted_global(const std::vector<int>& local, MPI_Comm comm) {
 }
 
 // --------------------- Merge-keep helpers ---------------------
-static inline void merge_keep_low_n(const std::vector<int>& A,
-                                    const std::vector<int>& B,
-                                    std::vector<int>& out) {
+static inline void merge_keep_low_n(const std::vector<T>& A,
+                                    const std::vector<T>& B,
+                                    std::vector<T>& out) {
     CALI_CXX_MARK_FUNCTION;
     size_t n = out.size();
     size_t i=0, j=0, k=0;
@@ -169,9 +172,9 @@ static inline void merge_keep_low_n(const std::vector<int>& A,
         else                                   out[k++] = B[j++];
     }
 }
-static inline void merge_keep_high_n(const std::vector<int>& A,
-                                     const std::vector<int>& B,
-                                     std::vector<int>& out) {
+static inline void merge_keep_high_n(const std::vector<T>& A,
+                                     const std::vector<T>& B,
+                                     std::vector<T>& out) {
     CALI_CXX_MARK_FUNCTION;
     size_t n = out.size();
     long long i = (long long)n - 1, j = (long long)n - 1, k = (long long)n - 1;
@@ -182,7 +185,7 @@ static inline void merge_keep_high_n(const std::vector<int>& A,
 }
 
 // --------------------- Bitonic process-level network ---------------------
-void bitonic_sort_mpi(std::vector<int>& local, MPI_Comm comm) {
+void bitonic_sort_mpi(std::vector<T>& local, MPI_Comm comm) {
     //CALI_CXX_MARK_FUNCTION;
 
     int P, r;
@@ -190,7 +193,7 @@ void bitonic_sort_mpi(std::vector<int>& local, MPI_Comm comm) {
     MPI_Comm_rank(comm, &r);
 
     const int n = (int)local.size();
-    std::vector<int> tmp(n), next(n); // partner buf & output buf
+    std::vector<T> tmp(n), next(n); // partner buf & output buf
 
     // 0) Local pre-sort
     {
@@ -297,7 +300,7 @@ int main(int argc, char** argv) {
     const int n = (int)(N / P);
 
     // Per-rank data generation (no root scatter)
-    std::vector<int> local(n);
+    std::vector<T> local(n);
     make_local_data(local, N, r, P, args);
 
     // Adiak run metadata
