@@ -412,12 +412,12 @@ Analyze these plots and choose a subset to present and explain in your presentat
 #### Strong Scaling Plots
 
   <img src="bitonic_sort/plots/strong-scaling/strong_scaling_comm_input_size_67108864.png" width="500" height="400"> 
-  <img src="bitonic_sort/plots/strong-scaling/trong_scaling_comp_large_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling/strong_scaling_comp_large_input_size_67108864.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/strong-scaling/strong_scaling_main_input_size_67108864.png" width="500" height="400"> 
 
 #### Strong Scaling Speedup Plots
 
-  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_comm_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong_scaling_speedup_comm_input_type_Random.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_comp_large_input_type_Random.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400"> 
 
