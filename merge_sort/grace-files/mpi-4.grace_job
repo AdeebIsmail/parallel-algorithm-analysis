@@ -32,7 +32,7 @@ mkdir -p cali-files
 
 # Run the program
 CALI_CONFIG="spot(output=cali-files/${num_elements}-${num_procs}-${sort_level}-${use_float}.cali)" \
-mpirun -np $num_procs ./merge_sort $num_elements $sort_level $use_floatel
+mpirun -np $num_procs ./merge_sort $num_elements $sort_level $use_float
 
 squeue -j $SLURM_JOBID
 
