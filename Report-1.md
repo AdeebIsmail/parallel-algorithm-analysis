@@ -406,6 +406,31 @@ Plots for the presentation should be as follows:
 
 Analyze these plots and choose a subset to present and explain in your presentation.
 
+
+### Bitonic Sort
+
+#### Strong Scaling Plots
+
+  <img src="bitonic_sort/plots/strong-scaling/strong_scaling_comm_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling/trong_scaling_comp_large_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling/strong_scaling_main_input_size_67108864.png" width="500" height="400"> 
+
+#### Strong Scaling Speedup Plots
+
+  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_comm_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_comp_large_input_type_Random.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400"> 
+
+#### Weak Scaling Plots
+
+  <img src="bitonic_sort/plots/weak-scaling/weak_scaling_comm_input_type_Random.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/weak-scaling/weak_scaling_comp_large_input_type_Random.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/weak-scaling/weak_scaling_main_input_type_Random.png" width="500" height="400"> 
+
+#### Analysis Bitonic Sort
+
+What’s going on is pretty simple: the bitonic sort has a lot of communication phases. In each phase, every process sends its chunk to a partner, gets their chunk back, and then compares the two chunks to keep the half it’s supposed to keep. We do that over and over as we scale up. So even when you add more processes, each one still has to go through all of those group steps, and each step touches its whole local array. That’s why the runtime doesn’t fall off the way you’d hope when you throw more ranks at it. Once we hit around 128–256 ranks the extra stages and the busy network start to dominate and the strong scaling curves flatten or even go up. The communication plots pop at the same points, especially for random and reverse inputs, because those inputs force real data movement in the compare split instead of letting us “win” quickly. Sorted input is always the cleanest line for that reason. The main time is just comp plus comm, so it shows both effects at once. In weak scaling we still have to run all the bitonic stages as P grows, so the time drifts upward even though the local problem size stays about the same. In short, adding more processors does not inherantly increase performance. Communication between processes takes time, and with enough processors, communication between them takes longer than computation itself.
+
 ### Radix Sort
 
 #### Strong Scaling Plots
