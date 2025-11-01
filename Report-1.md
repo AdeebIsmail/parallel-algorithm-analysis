@@ -507,6 +507,26 @@ Looking at the strong scaling performance in Sample Sort, follows an upward tren
 Looking at the weak scaling graphs, starting with comp_large, the time increases nearly linearly as both problem size and processor count grows. This is expected behavior as each rank must handle a proportionally similar local problem, which its local sorting cost grows as the array size grows. The main phase shows behavior consistent with the combination of both rising overall runtime with increasing scale but without major outliers. The lack of severe spikes suggests that weak scaling mitigates imbalance issues, as each rank's data size grows uniformly. This is especially apparent in the sorted and reversed respectively.
 Looking at the Strong Scaling Speedup graph, starting with the comm speedup, the plot shows that communication efficiency varies drastically across input sizes, which presumably reflects the network contention and nonuniform workload balance under random partitioning, where small changes in the splitter distribution can drastically affect which ranks communicate most heavily. On te other hand, comp_large speedup is nearly ideal, as we increase the number of processors, speedup grows exponentially across all input sizes. This reflects that the local sort operation is close to being embarassingly parallel, which each processor gets to sort a smaller subset of a bigger array straight off the bat, decreasing nearly perfectly with additional processor. The main speedup graph is the middle ground. The graph suggests that while computation scales well, communication dominates the total runtime at scale, limiting the total efficiency of the algorithm.
 
+### Comparisons
+
+#### Strong Scaling Plots
+
+![alt text](comparison-plots/image.png)
+![alt text](comparison-plots/image-1.png)
+![alt text](comparison-plots/image-2.png)
+
+#### Strong Scaling Speedup Plots
+
+![alt text](comparison-plots/image-3.png)
+![alt text](comparison-plots/image-4.png)
+![alt text](comparison-plots/image-5.png)
+
+#### Weak Scaling Plots
+
+![alt text](comparison-plots/image-6.png)
+![alt text](comparison-plots/image-7.png)
+![alt text](comparison-plots/image-8.png)
+
 ## 8. Final Report
 
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
