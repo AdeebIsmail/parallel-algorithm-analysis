@@ -406,26 +406,25 @@ Plots for the presentation should be as follows:
 
 Analyze these plots and choose a subset to present and explain in your presentation.
 
-
 ### Bitonic Sort
 
 #### Strong Scaling Plots
 
   <img src="bitonic_sort/plots/strong-scaling/strong_scaling_comm_input_size_67108864.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/strong-scaling/strong_scaling_comp_large_input_size_67108864.png" width="500" height="400"> 
-  <img src="bitonic_sort/plots/strong-scaling/strong_scaling_main_input_size_67108864.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling/strong_scaling_main_input_size_67108864.png" width="500" height="400">
 
 #### Strong Scaling Speedup Plots
 
   <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_comm_input_type_Random.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_comp_large_input_type_Random.png" width="500" height="400"> 
-  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400">
 
 #### Weak Scaling Plots
 
   <img src="bitonic_sort/plots/weak-scaling/weak_scaling_comm_input_type_Random.png" width="500" height="400"> 
   <img src="bitonic_sort/plots/weak-scaling/weak_scaling_comp_large_input_type_Random.png" width="500" height="400"> 
-  <img src="bitonic_sort/plots/weak-scaling/weak_scaling_main_input_type_Random.png" width="500" height="400"> 
+  <img src="bitonic_sort/plots/weak-scaling/weak_scaling_main_input_type_Random.png" width="500" height="400">
 
 #### Analysis Bitonic Sort
 
@@ -453,10 +452,9 @@ What’s going on is pretty simple: the bitonic sort has a lot of communication 
 
 #### Analysis Radix Sort
 
-The speedup factor doesn’t vary much between input type (sorted, perturbed, etc.) because radix sort doesn’t have an inbuilt mechanism to check the sorting level of the array. So, each input, even if it’s already sorted, is sorted radix by radix. The communication speedup curve generally decays because increasing the number of processes causes increased communication among the processes. This is especially true for my radix sort implementation since each process could possibly send elements to every other process. Interestingly, 2^9 and above processes seem to perform well in many plots, and even have communication speedup, suggesting that grace has a more optimal resource allocation strategy after some threshold. 
-The large computation speedup generally increases with increased process count before hitting a plateau and decreasing. Larger input sizes seem to have increased speedup compared to smaller input sizes as indicated by sharper curves. This increased speedup can be attributed to each process having to locally sort less elements since the input size is fixed. The strong scaling plot especially supports this as increasing the process count for fixed input sizes shows a decaying exponential trend. Since part of the large computation time involves computing histograms of every process, plateaus are unsurprising since computing histograms for more processes takes longer. 
-The total or main speedup behaves similarly to the large computation time as it increases before hitting a plateau and decreasing. Increasing process count only seems to benefit input sizes of 2^24 and above as the other input sizes seem to mainly have negative speedup (i.e. slowdown). While the large computation speedup is as large as ~120, the total speedup is much more modest (~4). This is because increased communication costs cancel out the benefits of quicker computation, leading to more modest efficiency gains. The weak scaling plots especially support this as the main time looks like a replica of the comm time on a different scale. The strong scaling plots also show this balance quite well as the first half of the main time closely resembles a decaying computation time while the second half resembles an increased communication time. In other words, the strong scaling plot looks like the comp_large plot superimposed on the comm_time plot.  
-
+The speedup factor doesn’t vary much between input type (sorted, perturbed, etc.) because radix sort doesn’t have an inbuilt mechanism to check the sorting level of the array. So, each input, even if it’s already sorted, is sorted radix by radix. The communication speedup curve generally decays because increasing the number of processes causes increased communication among the processes. This is especially true for my radix sort implementation since each process could possibly send elements to every other process. Interestingly, 2^9 and above processes seem to perform well in many plots, and even have communication speedup, suggesting that grace has a more optimal resource allocation strategy after some threshold.
+The large computation speedup generally increases with increased process count before hitting a plateau and decreasing. Larger input sizes seem to have increased speedup compared to smaller input sizes as indicated by sharper curves. This increased speedup can be attributed to each process having to locally sort less elements since the input size is fixed. The strong scaling plot especially supports this as increasing the process count for fixed input sizes shows a decaying exponential trend. Since part of the large computation time involves computing histograms of every process, plateaus are unsurprising since computing histograms for more processes takes longer.
+The total or main speedup behaves similarly to the large computation time as it increases before hitting a plateau and decreasing. Increasing process count only seems to benefit input sizes of 2^24 and above as the other input sizes seem to mainly have negative speedup (i.e. slowdown). While the large computation speedup is as large as ~120, the total speedup is much more modest (~4). This is because increased communication costs cancel out the benefits of quicker computation, leading to more modest efficiency gains. The weak scaling plots especially support this as the main time looks like a replica of the comm time on a different scale. The strong scaling plots also show this balance quite well as the first half of the main time closely resembles a decaying computation time while the second half resembles an increased communication time. In other words, the strong scaling plot looks like the comp_large plot superimposed on the comm_time plot.
 
 ### Merge Sort
 
@@ -480,31 +478,37 @@ The total or main speedup behaves similarly to the large computation time as it 
 
 #### Analysis - Merge Sort
 
-Looking at the weak scaling for comp_large, follows an upward trend. This makes sense since as we increase the problem size, the amount of time we spend merging arrays will also increase. For communication, we can see that it increases and then drops down. This could be due to the fact as we increase the problem size and processor count, we spend less time communicating between processors. For strong scaling comp_large, we can see a decreasing trend which makes sense. As we increase the processor count, we spend less time merging arrays, since each processors has a smaller array size. For comm, we again see it increases and then drops down near the end. As we increase the processor count, we spend more time communicating. The reason for the dropoff could be because we have so many processors, each one has a small set of data which does not take long to send and receive. For comm speedup strong scaling, there is a jump at the end for the different input types. We can see our communication is not scaling well unless it is at large input sizes. This makes sense with our other comm graphs since, as we can see before as comm was dropping for large processor count for strong scaling.
+For comm strong scaling, increasing the number of processor means more communication being done by each processor. As we increase the number of processors, we start by sending and reciving smaller arrays which cascade into sending larger and reciving larger arrays. This could be causing the increase in communication, because we have large amounts of processors sending and reciving larger and larger arrays. The dropoff at the end could be due to merge sort working best when the number of processors is large, such that each processor is getting small enough arrays so that its very quick initally to send and recives before it starts to getting to sending larger arrays, where it starts to slow down. This make sense since with less processors we spend more time in comp_large, but as we spend less time in comp_large, we are limited by the communcation between processors. The reason our comp_large drops at 1024 processors, but our comm also drops, could be because our array sizes are so small, that it takes very little time to merge and to send.
+For comp large strong scaling, we are measure the time it takes to merge arrays. Since we increase the processor count, each sorted array for each processor gets smaller, so we are merging smaller sorted arrays, which takes less time as we increase the processor count. Each processor starts with the smaller array, so merging initially is quite fast.Our main has a similar shape to our comp_large, illustrating that our comp_large mostly domiantes the main function. Comp large seems to scale well with all input sizes and input types, which makes sense since each processor is getting a smaller array to merge together as we increase the processor count. Our comm seems to scale well with only large input sizes, which tells us that only with large input sizes are we able to give each processor enough work to do, and send data efficiently. Because of this, our comm domiantes the main speed up, since comm is only scaling well with large input sizes. Our comp_large max is really high since we are reciving and sending larger and larger arrays as we increase processor count. Eventually, a rank will be sending/reciving a large array, which increase the amount of time that rank spends merging. The min and avg are low since we start with small arrays that we merge and build up to larger arrays, and most of the processors end up working with the smaller arrays. For comm we again see the dropoff for 1024 processors at a large input size, which tells us that we are only scaling well with large input sizes and large amounts of processors. Which again could be that each array is small enough such that merging does not take long, and the array is small enough so that sending does not take long. The communication increase makes sense. Our main is mostly dominated by our comm for large input sizes and large processor counts
 
 ### Sample Sort
 
 #### Strong Scaling Plots
+
 <img src="./sample-sort/plots/strong-scaling/strong_scaling_comm_input_size_268435456.png" width="500" height="400">
 <img src="./sample-sort/plots/strong-scaling/strong_scaling_comp_large_input_size_268435456.png" width="500" height="400">
 <img src="./sample-sort/plots/strong-scaling/strong_scaling_main_input_size_268435456.png" width="500" height="400">
 
 #### Strong Scaling Speedup Plots
+
 <img src="./sample-sort/plots/strong-scaling-speedup/strong_scaling_speedup_comm_input_type_Random.png" width="500" height="400">
 <img src="./sample-sort/plots/strong-scaling-speedup/strong_scaling_speedup_comp_large_input_type_Random.png" width="500" height="400"> 
 <img src="./sample-sort/plots/strong-scaling-speedup/strong_scaling_speedup_main_input_type_Random.png" width="500" height="400">
 
 #### Weak Scaling Plots
+
 <img src="./sample-sort/plots/weak-scaling/weak_scaling_comm_input_type_Random.png" width="500" height="400">
 <img src="./sample-sort/plots/weak-scaling/weak_scaling_comp_large_input_type_Random.png" width="500" height="400">
 <img src="./sample-sort/plots/weak-scaling/weak_scaling_main_input_type_Random.png" width="500" height="400">
 
 #### Analysis - Sample Sort
+
 Looking at the strong scaling performance in Sample Sort, follows an upward trend with high irregularity, particularly for the random input case. Most input types (sorted, perturbed, reversed) remain relatively stable across increasing processor counts, but random input spikes dramatically near 256 processors before dropping sharply at around 512 and 1024 processors. This behavior can be caused by load imbalance and communication bottlenecks triggered by uneven partitioning in the local data for each processor. With random input, samples are not uniformly distributed across buckets, leading to heavy communication overheads during the Alltoallv redistribution. The comp_small exhibits a more predictable behavior trend, which increases as the processor count increases, which indicates that that there is a degradation of computational efficiency due to uneven data distribution presumably by poor splitter selection. This behavior is shared with the main input type, which suggests that the load imbalance is the main bottleneck in the sorting algorithm. When looking at main, it seems to indicate that the communication overhead is the main bottleneck in this algorithm.
 Looking at the weak scaling graphs, starting with comp_large, the time increases nearly linearly as both problem size and processor count grows. This is expected behavior as each rank must handle a proportionally similar local problem, which its local sorting cost grows as the array size grows. The main phase shows behavior consistent with the combination of both rising overall runtime with increasing scale but without major outliers. The lack of severe spikes suggests that weak scaling mitigates imbalance issues, as each rank's data size grows uniformly. This is especially apparent in the sorted and reversed respectively.
 Looking at the Strong Scaling Speedup graph, starting with the comm speedup, the plot shows that communication efficiency varies drastically across input sizes, which presumably reflects the network contention and nonuniform workload balance under random partitioning, where small changes in the splitter distribution can drastically affect which ranks communicate most heavily. On te other hand, comp_large speedup is nearly ideal, as we increase the number of processors, speedup grows exponentially across all input sizes. This reflects that the local sort operation is close to being embarassingly parallel, which each processor gets to sort a smaller subset of a bigger array straight off the bat, decreasing nearly perfectly with additional processor. The main speedup graph is the middle ground. The graph suggests that while computation scales well, communication dominates the total runtime at scale, limiting the total efficiency of the algorithm.
 
 ## 8. Final Report
+
 Submit a zip named `TeamX.zip` where `X` is your team number. The zip should contain the following files:
 
 - Algorithms: Directory of source code of your algorithms.
