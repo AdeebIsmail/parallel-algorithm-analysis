@@ -1,3 +1,12 @@
+<style>
+img {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  display: block;
+  margin: auto;
+}
+</style>
+
 # CSCE 435 Group project
 
 ## 0. Group number and the communication medium(slack etc.):
