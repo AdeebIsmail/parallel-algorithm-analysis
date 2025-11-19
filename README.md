@@ -1,11 +1,4 @@
-<style>
-img {
-  page-break-inside: avoid;
-  break-inside: avoid;
-  display: block;
-  margin: auto;
-}
-</style>
+
 
 # CSCE 435 Group project
 
